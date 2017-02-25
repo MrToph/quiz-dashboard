@@ -1,7 +1,7 @@
 import ApiError from './Error'
 import { isProduction } from '../utils'
 
-const url = isProduction() ? 'https://heroku.com/TODO' : 'http://localhost:3001/api'
+export const url = isProduction() ? 'https://heroku.com/TODO' : 'http://localhost:3001/api'
 
 function parseAndHandleErrors(response) {
   if (response.ok) {
@@ -34,6 +34,7 @@ export function authenticate(user, password) {
     body: JSON.stringify(body), // need to convert to JSON
   })
   .then(parseAndHandleErrors)
+  .then(response => response.apiToken)
 }
 
 export function signup(user, password, email) {
