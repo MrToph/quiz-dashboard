@@ -1,0 +1,1 @@
+Admin dashboard for the [quiz-backend](https://github.com/MrToph/quiz-backend)
