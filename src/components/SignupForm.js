@@ -1,15 +1,15 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
-import { selectLogin } from '../store/selectors'
+import { selectSignup } from '../store/selectors'
 import FormTextField from './FormTextField'
-import { validateLoginInput } from '../shared/validations/login'
-import { userLoginStart } from '../store/navigation/actions'
+import { validateSignupInput } from '../shared/validations/login'
+import { userSignupStart } from '../store/navigation/actions'
 import './Form.css'
 
-export class LoginForm extends Component {
+export class SignupForm extends Component {
   static propTypes = {
-    dispatchUserLogin: PropTypes.func.isRequired,
+    dispatchUserSignup: PropTypes.func.isRequired,
     errors: PropTypes.objectOf(PropTypes.string).isRequired,  // eslint-disable-line
     isLoading: PropTypes.bool.isRequired,
   }
@@ -18,6 +18,7 @@ export class LoginForm extends Component {
     errors: {},
     username: '',
     password: '',
+    email: '',
   }
 
   componentWillReceiveProps(nextProps) {
@@ -34,8 +35,8 @@ export class LoginForm extends Component {
       this.setState({
         errors: {},
       })
-      const { username, password } = this.state
-      this.props.dispatchUserLogin(username, password)
+      const { username, password, email } = this.state
+      this.props.dispatchUserSignup(username, password, email)
     }
   }
 
@@ -47,7 +48,7 @@ export class LoginForm extends Component {
   }
 
   isValid = () => {
-    const { errors, isValid } = validateLoginInput(this.state)
+    const { errors, isValid } = validateSignupInput(this.state)
 
     if (!isValid) {
       this.setState({ errors })
@@ -57,11 +58,19 @@ export class LoginForm extends Component {
   }
 
   render() {
-    const { username, password, errors } = this.state
+    const { username, password, email, errors } = this.state
     const { isLoading } = this.props
     return (
       <form className={classnames('Form ui large form stacked segment', { error: Object.keys(errors).length > 0, loading: isLoading })} onSubmit={this.onSubmit}>
-        <h2>Login</h2>
+        <h2>Signup</h2>
+        <FormTextField
+          field="email"
+          type="email"
+          label="EMail"
+          error={errors.email}
+          value={email}
+          onChange={this.onChange}
+        />
         <FormTextField
           field="username"
           label="Username"
@@ -77,13 +86,13 @@ export class LoginForm extends Component {
           value={password}
           onChange={this.onChange}
         />
-        <button className="ui primary submit button" type="submit">Login</button>
+        <button className="ui primary submit button" type="submit">Signup</button>
         { errors.form && <span className="ui error message">{errors.form}</span> }
       </form>
     )
   }
 }
 
-const mapStateToProps = state => selectLogin(state)
+const mapStateToProps = state => selectSignup(state)
 
-export default connect(mapStateToProps, { dispatchUserLogin: userLoginStart })(LoginForm)
+export default connect(mapStateToProps, { dispatchUserSignup: userSignupStart })(SignupForm)

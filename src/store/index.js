@@ -3,7 +3,6 @@ import createSagaMiddleware from 'redux-saga'
 import logger from 'redux-logger'
 import navReducer from './navigation/reducer'
 import rootSaga from './sagas'
-import { watchUserLogin } from './navigation/sagas'
 import { isProduction } from '../utils'
 
 const middleWares = []

@@ -34,7 +34,7 @@ export function authenticate(user, password) {
     body: JSON.stringify(body), // need to convert to JSON
   })
   .then(parseAndHandleErrors)
-  .then(response => response.apiToken)
+  .then(response => response.token)
 }
 
 export function signup(user, password, email) {
