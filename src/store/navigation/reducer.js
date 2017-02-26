@@ -17,8 +17,26 @@ function extractServerErrors(action) {
   return errors
 }
 
+function saveToLocalStorage(data) {
+  localStorage.setItem('login', JSON.stringify(data))
+}
+
+function loadFromLocalStorage() {
+  console.log(loadFromLocalStorage)
+  try {
+    const json = localStorage.getItem('login')
+    return json ? JSON.parse(json) : defaultLoginState
+  } catch (ex) {
+    console.error(ex.message)
+    return defaultLoginState
+  }
+}
+
 function loginReducer(state = defaultLoginState, action) {
   switch (action.type) {
+    case ActionTypes.appStarted: {
+      return loadFromLocalStorage()
+    }
     case ActionTypes.userLoginStart: {
       const { username } = action.payload
       return {
@@ -26,16 +44,19 @@ function loginReducer(state = defaultLoginState, action) {
         username,
         isLoading: true,
         loggedIn: false,
+        serverErrors: [],
       }
     }
     case ActionTypes.userLoginSuccess: {
       const { apiToken } = action.payload
-      return {
+      const newState = {
         ...state,
         jwtToken: apiToken,
         isLoading: false,
         loggedIn: true,
       }
+      saveToLocalStorage(newState)
+      return newState
     }
     case ActionTypes.userLoginError: {
       const errors = extractServerErrors(action)
@@ -62,6 +83,7 @@ function signupReducer(state = defaultSignupState, action) {
       return {
         ...state,
         isLoading: true,
+        serverErrors: [],
       }
     }
     case ActionTypes.userSignupSuccess: {

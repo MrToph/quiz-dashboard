@@ -7,6 +7,7 @@ var ActionTypes = { // eslint-disable-line
   userSignupStart: 'SIGNUP_START',
   userSignupSuccess: 'SIGNUP_SUCCESS',
   userSignupError: 'SIGNUP_ERROR',
+  appStarted: 'APP_STARTED',
 }
 
 // requires ES6 Proxies, we don't want to link them at run-time
@@ -21,6 +22,10 @@ var ActionTypes = { // eslint-disable-line
 // }
 
 export default ActionTypes
+
+export const createAppStarted = () => ({
+  type: ActionTypes.appStarted,
+})
 
 export const userLoginStart = (username, password) => ({
   type: ActionTypes.userLoginStart,

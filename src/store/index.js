@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import logger from 'redux-logger'
+import { hookConsoleLog } from 'stacklogger'
 import navReducer from './navigation/reducer'
 import rootSaga from './sagas'
 import { isProduction } from '../utils'
@@ -13,6 +14,7 @@ middleWares.push(sagaMiddleWare)
 
 
 if (!isProduction()) {
+  hookConsoleLog()
   middleWares.push(logger())
 }
 
