@@ -34,6 +34,7 @@ function loginReducer(state = defaultLoginState, action) {
         ...state,
         jwtToken: apiToken,
         isLoading: false,
+        loggedIn: true,
       }
     }
     case ActionTypes.userLoginError: {

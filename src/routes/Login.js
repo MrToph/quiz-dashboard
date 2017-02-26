@@ -1,9 +1,18 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Component, PropTypes } from 'react'
+import { Link, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
 import LoginForm from '../components/LoginForm'
+import { selectIsLoggedIn } from '../store/selectors'
 
-export default class LoginRoute extends Component {
+export class LoginRoute extends Component {
+  static propTypes = {
+    location: PropTypes.object.isRequired, // eslint-disable-line
+    isLoggedIn: PropTypes.bool.isRequired,
+  }
   render() {
+    const { from } = this.props.location.state || { from: '/' }
+
+    if (this.props.isLoggedIn) return (<Redirect to={from} />)
     return (
       <div>
         <LoginForm />
@@ -12,3 +21,9 @@ export default class LoginRoute extends Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  isLoggedIn: selectIsLoggedIn(state),
+})
+
+export default connect(mapStateToProps)(LoginRoute)
