@@ -24,8 +24,8 @@ export class App extends Component {
   render() {
     return (
       <div className="App">
-        <TabBar />
         <h2>Quiz Dashboard</h2>
+        <TabBar />
         <Switch>
           <Route exact path="/login" component={LoginRoute} />
           <Route exact path="/signup" component={SignupRoute} />
