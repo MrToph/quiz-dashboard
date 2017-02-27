@@ -45,7 +45,6 @@ export default class ArtistForm extends Component {
 
   render() {
     const { name, url, errors } = this.state
-    console.log(errors)
     return (
       <form className={classnames('ui form green segment')} onSubmit={this.onSubmit}>
         <h4>Add Artist</h4>

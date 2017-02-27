@@ -12,8 +12,8 @@ export class Artists extends Component {
     })).isRequired,
   }
 
-  onAddRow = (...args) => {
-    console.log(...args)
+  onAddRow = (name, url) => {
+    console.log(name, url)
   }
 
   render() {
@@ -22,8 +22,8 @@ export class Artists extends Component {
         {
             this.props.artists.map(artist => <ArtistRow key={artist.name} {...artist} />)
         }
-        <AddItemRow onClick={this.onAddRow}>
-          <ArtistForm />
+        <AddItemRow>
+          <ArtistForm onSubmit={this.onAddRow} />
         </AddItemRow>
       </div>
     )
