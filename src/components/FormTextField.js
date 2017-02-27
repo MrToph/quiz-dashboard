@@ -6,7 +6,7 @@ export default function FormTextField({ field, value, label, error, type, onChan
     <div className={classnames('field', { error })}>
       <label htmlFor={field}>{label}</label>
       <input type={type} name={field} placeholder={label} onChange={onChange} value={value} />
-      { error && <span className="ui error message">{error}</span> }
+      { error && <span className="ui error message visible">{error}</span> }
     </div>
   )
 }
