@@ -1,27 +1,36 @@
 import React, { PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { userLogout } from '../store/navigation/actions'
 
-export default function TabBar(props) {
-  return (
-    <div className="ui menu">
-      <a className="active item">
-            Home
+export class TabBar extends React.Component {
+  static propTypes = {
+    dispatchLogout: PropTypes.func.isRequired,
+  }
+
+  onLogout = () => {
+    this.props.dispatchLogout()
+  }
+
+  render() {
+    return (
+      <div className="ui secondary pointing menu">
+        <a className="active item">
+            Active Songs
         </a>
-      <a className="item">
-            Messages
+        <a className="item">
+            Pending Songs
         </a>
-      <div className="right menu">
-        <div className="ui dropdown item">
-            Language <i className="dropdown icon" />
-          <div className="menu">
-            <a className="item">English</a>
-            <a className="item">Russian</a>
-            <a className="item">Spanish</a>
+        <a className="item">
+            Artists
+        </a>
+        <div className="right menu">
+          <div className="item">
+            <button className="ui primary button" onClick={this.onLogout}>Log out</button>
           </div>
         </div>
-        <div className="item">
-          <div className="ui primary button">Sign Up</div>
-        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
+
+export default connect(null, { dispatchLogout: userLogout })(TabBar)

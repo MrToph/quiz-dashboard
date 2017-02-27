@@ -21,8 +21,11 @@ function saveToLocalStorage(data) {
   localStorage.setItem('login', JSON.stringify(data))
 }
 
+function clearLocalStorage() {
+  localStorage.removeItem('login')
+}
+
 function loadFromLocalStorage() {
-  console.log(loadFromLocalStorage)
   try {
     const json = localStorage.getItem('login')
     return json ? JSON.parse(json) : defaultLoginState
@@ -66,6 +69,10 @@ function loginReducer(state = defaultLoginState, action) {
         isLoading: false,
         loggedIn: false,
       }
+    }
+    case ActionTypes.userLogout: {
+      clearLocalStorage()
+      return defaultLoginState
     }
     default:
       return state

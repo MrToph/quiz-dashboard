@@ -5,7 +5,10 @@ import TabBar from './components/TabBar'
 import PrivateRoute from './routes/PrivateRoute'
 import LoginRoute from './routes/Login'
 import SignupRoute from './routes/Signup'
-import SongsRoute from './routes/Songs'
+import ActiveRoute from './routes/Active'
+import PendingRoute from './routes/Pending'
+import ArtistsRoute from './routes/Artists'
+import Route404 from './routes/404'
 import { createAppStarted } from './store/navigation/actions'
 import './App.css'
 
@@ -26,8 +29,10 @@ export class App extends Component {
         <Switch>
           <Route exact path="/login" component={LoginRoute} />
           <Route exact path="/signup" component={SignupRoute} />
-          <PrivateRoute exact path="/" component={SongsRoute} />
-          <PrivateRoute component={SongsRoute} />
+          <PrivateRoute exact path="/" component={ActiveRoute} />
+          <PrivateRoute exact path="/pending" component={PendingRoute} />
+          <PrivateRoute exact path="/artists" component={ArtistsRoute} />
+          <PrivateRoute component={Route404} />
         </Switch>
       </div>
     )

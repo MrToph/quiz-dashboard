@@ -7,6 +7,7 @@ var ActionTypes = { // eslint-disable-line
   userSignupStart: 'SIGNUP_START',
   userSignupSuccess: 'SIGNUP_SUCCESS',
   userSignupError: 'SIGNUP_ERROR',
+  userLogout: 'LOGOUT',
   appStarted: 'APP_STARTED',
 }
 
@@ -45,6 +46,10 @@ export const userLoginSuccess = apiToken => ({
 export const userLoginError = error => ({
   type: ActionTypes.userLoginError,
   payload: error,
+})
+
+export const userLogout = () => ({
+  type: ActionTypes.userLogout,
 })
 
 export const userSignupStart = (username, password, email) => ({

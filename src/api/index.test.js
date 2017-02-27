@@ -3,7 +3,7 @@ import { url, authenticate, signup } from './index'
 
 function setupMocks() {
   fetchMock.post(`${url}/authenticate`, JSON.stringify({
-    apiToken: '1234',
+    token: '1234',
   }))
 
   fetchMock.post(`${url}/signup`, JSON.stringify({ }))

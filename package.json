@@ -36,6 +36,10 @@
   "jest": {
     "global": {
       "window": true
-    }
+    },
+    "setupTestFrameworkScriptFile": "./jest/setup123.js",
+    "setupFiles": [
+      "./jest/setup123.js"
+    ]
   }
 }
