@@ -1,12 +1,37 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import ArtistRow from '../components/ArtistRow'
+import AddItemRow from '../components/AddItemRow'
+import ArtistForm from '../components/ArtistForm'
+import { selectArtists } from '../store/selectors'
 
-export default class Artists extends Component {
+export class Artists extends Component {
+  static propTypes = {
+    artists: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    })).isRequired,
+  }
+
+  onAddRow = (...args) => {
+    console.log(...args)
+  }
+
   render() {
     return (
-      <div>
-        <h3>Artists</h3>
+      <div className="ui relaxed divided list">
+        {
+            this.props.artists.map(artist => <ArtistRow key={artist.name} {...artist} />)
+        }
+        <AddItemRow onClick={this.onAddRow}>
+          <ArtistForm />
+        </AddItemRow>
       </div>
     )
   }
 }
+
+const mapStateToProps = state => ({
+  artists: selectArtists(state),
+})
+
+export default connect(mapStateToProps)(Artists)

@@ -3,6 +3,7 @@ import createSagaMiddleware from 'redux-saga'
 import logger from 'redux-logger'
 import { hookConsoleLog } from 'stacklogger'
 import navReducer from './navigation/reducer'
+import dataReducer from './data/reducer'
 import rootSaga from './sagas'
 import { isDevelopment } from '../utils'
 
@@ -20,6 +21,7 @@ if (isDevelopment()) {
 
 const reducers = combineReducers({
   navigation: navReducer,
+  data: dataReducer,
 })
 
 const store = createStore(reducers, undefined, applyMiddleware(...middleWares))

@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { extractServerErrors } from '../../api/Error'
 import ActionTypes from './actions'
 
 export const defaultLoginState = {
@@ -7,14 +8,6 @@ export const defaultLoginState = {
   username: '',
   isLoading: false,
   serverErrors: [],
-}
-
-function extractServerErrors(action) {
-  const error = action.payload
-  let errors = []
-  if (error.errors) errors = error.errors.slice()
-  else errors = [error.message]
-  return errors
 }
 
 function saveToLocalStorage(data) {

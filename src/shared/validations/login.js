@@ -24,3 +24,17 @@ export function validateSignupInput(data) {
 
   return { errors, isValid: Object.keys(errors).length === 0 }
 }
+
+export function validateArtistInput(data) {
+  const errors = {}
+
+  if (Validator.isEmpty(data.name)) {
+    errors.name = 'This field is required'
+  }
+
+  if (!Validator.isURL(data.url)) {
+    errors.url = 'This field is not a valid URL'
+  }
+
+  return { errors, isValid: Object.keys(errors).length === 0 }
+}

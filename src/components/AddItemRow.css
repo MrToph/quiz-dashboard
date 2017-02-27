@@ -1,0 +1,19 @@
+.addItemRow-icon {  /* start off with animation backwards */
+  animation: spin-backward 1 .15s linear;
+  animation-fill-mode: forwards;
+}
+
+.rotate {
+  animation: spin-forward 1 .15s linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes spin-forward {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(45deg); }
+}
+
+@keyframes spin-backward {
+  from { transform: rotate(45deg); }
+  to { transform: rotate(0deg); }
+}
