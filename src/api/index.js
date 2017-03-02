@@ -13,10 +13,18 @@ function parseAndHandleErrors(response) {
     })
 }
 
-function configurePostOptions(apiToken) {
+function configureGetOptions(apiToken) {
   const headers = new Headers()
-  // headers.append('Authorization', `JWT ${apiToken}`)
+  if (apiToken) headers.append('Authorization', `${apiToken}`)
   headers.append('Content-Type', 'application/json')
+  return {
+    method: 'GET',
+    headers,
+  }
+}
+
+function configurePostOptions(apiToken) {
+  const { headers } = configureGetOptions(apiToken)
   return {
     method: 'POST',
     headers,
@@ -45,6 +53,31 @@ export function signup(user, password, email) {
     email,
   }
   return fetch(`${url}/signup`, {
+    ...headers,
+    body: JSON.stringify(body),
+  })
+  .then(parseAndHandleErrors)
+}
+
+export function getArtists(apiToken) {
+  const headers = configureGetOptions(apiToken)
+  return fetch(`${url}/artists`, {
+    ...headers,
+  })
+  .then(parseAndHandleErrors)
+  .then(response => response.artists.map(artist => ({
+    name: artist.name,
+    url: artist.url,
+  })))
+}
+
+export function createArtists(apiToken, name, artistUrl) {
+  const headers = configurePostOptions(apiToken)
+  const body = {
+    name,
+    url: artistUrl,
+  }
+  return fetch(`${url}/artists`, {
     ...headers,
     body: JSON.stringify(body),
   })

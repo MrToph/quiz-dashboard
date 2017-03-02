@@ -5,10 +5,17 @@ import './AddItemRow.css'
 export default class AddItemRow extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
+    formOpen: PropTypes.bool.isRequired,  // eslint-disable-line
   }
 
   state = {
     formOpen: false,
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      formOpen: nextProps.formOpen,
+    })
   }
 
   onToggle = () => {

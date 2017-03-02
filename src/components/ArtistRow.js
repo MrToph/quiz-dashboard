@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react'
-import classnames from 'classnames'
 
 export default function ArtistRow({ name, url }) {
   return (

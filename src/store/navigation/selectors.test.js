@@ -3,7 +3,7 @@ import * as selectors from './selectors'
 const testState = {
   login: {
     loggedIn: false,
-    jwtToken: false,
+    jwtToken: '1234',
     username: '',
     isLoading: false,
     serverErrors: ['A', 'B'],
@@ -35,5 +35,12 @@ describe('selectSignup', () => {
       isLoading: true,
     }
     expect(selectors.selectSignup(testState)).toEqual(expected)
+  })
+})
+
+describe('selectAuthToken', () => {
+  it('selects the correct fields', () => {
+    const expected = '1234'
+    expect(selectors.selectAuthToken(testState)).toEqual(expected)
   })
 })

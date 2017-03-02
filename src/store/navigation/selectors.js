@@ -9,3 +9,5 @@ export const selectSignup = state => ({
   errors: { form: state.signup.serverErrors.join('\n') },
   isLoading: state.signup.isLoading,
 })
+
+export const selectAuthToken = state => state.login.jwtToken

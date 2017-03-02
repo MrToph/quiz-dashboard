@@ -4,6 +4,7 @@ import ActionTypes from './actions'
 
 export const defaultArtistsState = {
   isLoading: false,
+  formOpen: false,
   serverErrors: [],
   artists: ['Artist 1', 'Artist 2'],
   artistsByName: {
@@ -27,19 +28,21 @@ function artistsReducer(state = defaultArtistsState, action) {
         serverErrors: [],
       }
     }
-    case ActionTypes.artistsLoadSuccess: {
-      const newArtists = state.artists
-      const newArtistsByName = { ...state.artistsByName }
+    case ActionTypes.artistsCreateStart: {
       return {
         ...state,
-        isLoading: false,
-        artists: newArtists,
-        artistsByName: newArtistsByName,
+        formOpen: true,  /* set to true, so false can get injected on success */
+        isLoading: true,
+        serverErrors: [],
       }
     }
-    case ActionTypes.artistsUpdateSuccess: {
-      const newArtists = state.artists
-      const newArtistsByName = { ...state.artistsByName }
+    case ActionTypes.artistsFetchLoadSuccess: {
+      const { artists } = action.payload
+      const newArtists = artists.map(artist => artist.name)
+      const newArtistsByName = { }
+      artists.forEach((artist) => {
+        newArtistsByName[artist.name] = artist
+      })
       return {
         ...state,
         isLoading: false,
@@ -53,6 +56,24 @@ function artistsReducer(state = defaultArtistsState, action) {
         ...state,
         serverErrors: errors,
         isLoading: false,
+      }
+    }
+    case ActionTypes.artistsCreateSuccess: {
+      // if server responded with success, add it to our list without fetching the list from the server again
+      const { name, url } = action.payload
+      const newArtists = [...state.artists, name]
+      const newArtistsByName = {
+        ...state.artistsByName,
+        [name]: {
+          name, url,
+        },
+      }
+      return {
+        ...state,
+        formOpen: false,  /* close form on success */
+        isLoading: false,
+        artists: newArtists,
+        artistsByName: newArtistsByName,
       }
     }
     default: {
