@@ -21,7 +21,9 @@ export const defaultArtistsState = {
 
 function artistsReducer(state = defaultArtistsState, action) {
   switch (action.type) {
-    case ActionTypes.artistsFetchStart: {
+    case ActionTypes.artistsFetchStart:
+    case ActionTypes.artistSingleFetchStart:
+    case ActionTypes.artistUpdateStart: {
       return {
         ...state,
         isLoading: true,
@@ -50,6 +52,20 @@ function artistsReducer(state = defaultArtistsState, action) {
         artistsByName: newArtistsByName,
       }
     }
+    case ActionTypes.artistSingleFetchLoadSuccess: {
+      const { artist } = action.payload
+      const newArtists = state.artists.find(name => name === artist.name) ? state.artists : state.artists.concat([artist.name])
+      const newArtistsByName = {
+        ...state.artistsByName,
+        [artist.name]: artist,
+      }
+      return {
+        ...state,
+        isLoading: false,
+        artists: newArtists,
+        artistsByName: newArtistsByName,
+      }
+    }
     case ActionTypes.artistsFetchError: {
       const errors = extractServerErrors(action)
       return {
@@ -71,6 +87,26 @@ function artistsReducer(state = defaultArtistsState, action) {
       return {
         ...state,
         formOpen: false,  /* close form on success */
+        isLoading: false,
+        artists: newArtists,
+        artistsByName: newArtistsByName,
+      }
+    }
+    case ActionTypes.artistUpdateSuccess: {
+      // if server responded with success, add it to our list without fetching the list from the server again
+      const { name, url, oldName } = action.payload
+      const index = state.artists.findIndex(artistName => artistName === oldName)
+      const newArtists = state.artists.slice().splice(index, 1, name)
+      const newArtistsByName = {
+        ...state.artistsByName,
+        [name]: {
+          name, url,
+        },
+      }
+      if (oldName !== name) delete newArtistsByName[oldName]
+
+      return {
+        ...state,
         isLoading: false,
         artists: newArtists,
         artistsByName: newArtistsByName,

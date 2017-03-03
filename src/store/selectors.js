@@ -6,11 +6,11 @@ import * as dataSelectors from './data/selectors'
 
 const selectors = {}
 Object.keys(navigationSelectors).forEach((funcName) => {
-  selectors[funcName] = state => navigationSelectors[funcName](state.navigation)
+  selectors[funcName] = (state, ...args) => navigationSelectors[funcName](state.navigation, ...args)
 })
 
 Object.keys(dataSelectors).forEach((funcName) => {
-  selectors[funcName] = state => dataSelectors[funcName](state.data)
+  selectors[funcName] = (state, ...args) => dataSelectors[funcName](state.data, ...args)
 })
 
 // We want to be able to import like this "import { name1, name2 } from 'selectors'"

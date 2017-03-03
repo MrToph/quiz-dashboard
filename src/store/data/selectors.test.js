@@ -19,6 +19,16 @@ const testState = {
   },
 }
 
+describe('selectArtist', () => {
+  it('selects the correct fields', () => {
+    const expected = {
+      name: 'Artist 2',
+      url: 'http://artist2.com',
+    }
+    expect(selectors.selectArtist(testState, 'Artist 2')).toEqual(expected)
+  })
+})
+
 describe('selectArtists', () => {
   it('selects the correct fields', () => {
     const expected = [{

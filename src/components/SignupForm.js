@@ -36,7 +36,16 @@ export class SignupForm extends Component {
   render() {
     const { isLoading, errors } = this.props
     return (
-      <Form onSubmit={this.onSubmit} errors={errors} isLoading={isLoading} inputs={signupFormInputs} title="Signup" validationFunc={validateSignupInput} />
+      <Form
+        onSubmit={this.onSubmit}
+        errors={errors}
+        isLoading={isLoading}
+        inputs={signupFormInputs}
+        title="Signup"
+        validationFunc={validateSignupInput}
+        standalone
+        submitText="Signup"
+      />
     )
   }
 }

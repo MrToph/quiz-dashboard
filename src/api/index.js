@@ -31,6 +31,14 @@ function configurePostOptions(apiToken) {
   }
 }
 
+function configurePatchOptions(apiToken) {
+  const { headers } = configureGetOptions(apiToken)
+  return {
+    method: 'PATCH',
+    headers,
+  }
+}
+
 export function authenticate(user, password) {
   const headers = configurePostOptions()
   const body = {
@@ -59,6 +67,18 @@ export function signup(user, password, email) {
   .then(parseAndHandleErrors)
 }
 
+export function getArtist(apiToken, name) {
+  const headers = configureGetOptions(apiToken)
+  return fetch(`${url}/artists/${name}`, {
+    ...headers,
+  })
+  .then(parseAndHandleErrors)
+  .then(response => ({
+    name: response.artist.name,
+    url: response.artist.url,
+  }))
+}
+
 export function getArtists(apiToken) {
   const headers = configureGetOptions(apiToken)
   return fetch(`${url}/artists`, {
@@ -78,6 +98,19 @@ export function createArtists(apiToken, name, artistUrl) {
     url: artistUrl,
   }
   return fetch(`${url}/artists`, {
+    ...headers,
+    body: JSON.stringify(body),
+  })
+  .then(parseAndHandleErrors)
+}
+
+export function updateArtist(apiToken, oldName, name, artistUrl) {
+  const headers = configurePatchOptions(apiToken)
+  const body = {
+    name,
+    url: artistUrl,
+  }
+  return fetch(`${url}/artists/${oldName}`, {
     ...headers,
     body: JSON.stringify(body),
   })

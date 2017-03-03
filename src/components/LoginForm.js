@@ -27,7 +27,16 @@ export class LoginForm extends Component {
   render() {
     const { isLoading, dispatchUserLogin, errors } = this.props
     return (
-      <Form onSubmit={dispatchUserLogin} errors={errors} isLoading={isLoading} inputs={loginFormInputs} title="Login" validationFunc={validateLoginInput} />
+      <Form
+        onSubmit={dispatchUserLogin}
+        errors={errors}
+        isLoading={isLoading}
+        inputs={loginFormInputs}
+        title="Login"
+        validationFunc={validateLoginInput}
+        standalone
+        submitText="Login"
+      />
     )
   }
 }

@@ -21,7 +21,7 @@ export class TabBar extends React.Component {
       <div className="ui menu tabBar">
         <Link className={classnames('item', { active: path === '/' })} to="/">Active Songs</Link>
         <Link className={classnames('item', { active: path === '/pending' })} to="/pending">Pending Songs</Link>
-        <Link className={classnames('item', { active: path === '/artists' })} to="/artists">Artists</Link>
+        <Link className={classnames('item', { active: path.includes('/artists') })} to="/artists">Artists</Link>
         <div className="right menu">
           <div className="item">
             <button className="ui primary button" onClick={this.onLogout}>Log out</button>

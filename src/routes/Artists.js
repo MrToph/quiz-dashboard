@@ -7,7 +7,7 @@ import { selectArtists, selectArtistForm } from '../store/selectors'
 import { artistsFetchStart, artistsCreateStart } from '../store/data/actions'
 import { validateArtistInput } from '../shared/validations'
 
-const artistsFormInputs = [
+export const artistsFormInputs = [
   {
     name: 'name',
     label: 'Artist Name',
