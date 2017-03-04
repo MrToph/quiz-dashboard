@@ -2,7 +2,7 @@ import { call, put, takeLatest, select } from 'redux-saga/effects'
 import ActionTypes, * as actions from './actions'
 import { selectAuthToken } from '../selectors'
 
-import { getArtist, getArtists, createArtists, updateArtist } from '../../api'
+import { getArtist, getArtists, createArtists, updateArtist, deleteArtist } from '../../api'
 
 /* ************* */
 /* ** ARTISTS ** */
@@ -50,6 +50,17 @@ export function* artistUpdate(action) {
   }
 }
 
+export function* artistDelete(action) {
+  try {
+    const { name } = action.payload
+    const jwtToken = yield select(selectAuthToken)
+    yield call(deleteArtist, jwtToken, name)
+    yield put(actions.artistDeleteSuccess(name))
+  } catch (e) {
+    yield put(actions.artistsFetchError(e))
+  }
+}
+
 export function* watchArtistFetch() {
   yield takeLatest(ActionTypes.artistSingleFetchStart, artistFetch)
 }
@@ -66,5 +77,9 @@ export function* watchArtistUpdate() {
   yield takeLatest(ActionTypes.artistUpdateStart, artistUpdate)
 }
 
+export function* watchArtistDelete() {
+  yield takeLatest(ActionTypes.artistDeleteStart, artistDelete)
+}
+
 // Export watchers as default export in an array
-export default [watchArtistFetch, watchArtistsFetch, watchArtistsCreate, watchArtistUpdate]
+export default [watchArtistFetch, watchArtistsFetch, watchArtistsCreate, watchArtistUpdate, watchArtistDelete]

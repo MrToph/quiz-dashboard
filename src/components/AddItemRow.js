@@ -30,7 +30,7 @@ export default class AddItemRow extends React.Component {
     return (
       <div className="item">
         <div className="content">
-          <button className="ui button circular icon button--no-style" onClick={this.onToggle}>
+          <button className="ui button circular icon button--icon" onClick={this.onToggle}>
             <i className={classnames('addItemRow-icon large green plus middle aligned icon', { rotate: formOpen })} />
           </button>
           {

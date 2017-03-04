@@ -39,6 +39,14 @@ function configurePatchOptions(apiToken) {
   }
 }
 
+function configureDeleteOptions(apiToken) {
+  const { headers } = configureGetOptions(apiToken)
+  return {
+    method: 'DELETE',
+    headers,
+  }
+}
+
 export function authenticate(user, password) {
   const headers = configurePostOptions()
   const body = {
@@ -113,6 +121,14 @@ export function updateArtist(apiToken, oldName, name, artistUrl) {
   return fetch(`${url}/artists/${oldName}`, {
     ...headers,
     body: JSON.stringify(body),
+  })
+  .then(parseAndHandleErrors)
+}
+
+export function deleteArtist(apiToken, name) {
+  const headers = configureDeleteOptions(apiToken)
+  return fetch(`${url}/artists/${name}`, {
+    ...headers,
   })
   .then(parseAndHandleErrors)
 }

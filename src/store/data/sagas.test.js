@@ -1,72 +1,75 @@
 import { call, put, select } from 'redux-saga/effects'
 import * as actions from './actions'
-import { artistFetch, artistsFetch, artistsCreate } from './sagas'
-import { getArtist, getArtists, createArtists } from '../../api'
+import { artistFetch, artistsFetch, artistsCreate, artistUpdate, artistDelete } from './sagas'
+import { getArtist, getArtists, createArtists, updateArtist, deleteArtist } from '../../api'
 import { selectAuthToken } from '../../store/selectors'
 
-describe('artistsFetch', () => {
-  const authToken = 'JWT 123123'
-  it('yields the correct results', () => {
-    const gen = artistsFetch(actions.artistsFetchStart())
-    expect(gen.next().value).toEqual(select(selectAuthToken))
-    expect(gen.next(authToken).value).toEqual(call(getArtists, authToken))
+const authToken = 'JWT 123456'
 
-    const artists = [{ name: 'Name', url: 'URL' }, { name: 'Name2', url: 'URL2' }]
-    expect(gen.next(artists).value).toEqual(put(actions.artistsFetchLoadSuccess(artists)))
-  })
+const tests = [
+  {
+    testName: 'artistsFetch',
+    saga: artistsFetch,
+    initialActionCreator: actions.artistsFetchStart,
+    successActionCreator: actions.artistsFetchLoadSuccess,
+    apiCall: getArtists,
+    actionCreatorArguments: [],
+    apiReturnValue: [{ name: 'Name', url: 'URL' }, { name: 'Name2', url: 'URL2' }],
+  },
+  {
+    testName: 'artistsCreate',
+    saga: artistsCreate,
+    initialActionCreator: actions.artistsCreateStart,
+    successActionCreator: actions.artistsCreateSuccess,
+    apiCall: createArtists,
+    actionCreatorArguments: ['Name', 'https://name.com'],
+  },
+  {
+    testName: 'artistUpdate',
+    saga: artistUpdate,
+    initialActionCreator: actions.artistUpdateStart,
+    successActionCreator: actions.artistUpdateSuccess,
+    apiCall: updateArtist,
+    actionCreatorArguments: ['Name', 'Updated Name', 'https://updated.com'],
+  },
+  {
+    testName: 'artistDelete',
+    saga: artistDelete,
+    initialActionCreator: actions.artistDeleteStart,
+    successActionCreator: actions.artistDeleteSuccess,
+    apiCall: deleteArtist,
+    actionCreatorArguments: ['Name'],
+  },
+  {
+    testName: 'artistSingleFetch',
+    saga: artistFetch,
+    initialActionCreator: actions.artistSingleFetchStart,
+    successActionCreator: actions.artistSingleFetchLoadSuccess,
+    apiCall: getArtist,
+    actionCreatorArguments: ['Name'],
+    apiReturnValue: { name: 'Name', url: 'URL' },
+  },
+]
 
-  it('yields error action on throw', () => {
-    const gen = artistsFetch(actions.artistsFetchStart())
-    expect(gen.next().value).toEqual(select(selectAuthToken))
-    expect(gen.next(authToken).value).toEqual(call(getArtists, authToken))
-    const someError = {
-      message: 'Authentication failed',
-    }
-    expect(gen.throw(someError).value).toEqual(put(actions.artistsFetchError(someError)))
-  })
-})
+tests.forEach(({ testName, saga, initialActionCreator, successActionCreator, apiCall, actionCreatorArguments, apiReturnValue }) => {
+  describe(testName, () => {
+    it('yields the correct results', () => {
+      const gen = saga(initialActionCreator(...actionCreatorArguments))
+      expect(gen.next().value).toEqual(select(selectAuthToken))
+      expect(gen.next(authToken).value).toEqual(call(apiCall, authToken, ...actionCreatorArguments))
+      if (apiReturnValue) expect(gen.next(apiReturnValue).value).toEqual(put(successActionCreator(apiReturnValue)))
+      else expect(gen.next().value).toEqual(put(successActionCreator(...actionCreatorArguments)))
+    })
 
-describe('artistFetch', () => {
-  const authToken = 'JWT 123123'
-  const artist = { name: 'Name', url: 'URL' }
-  it('yields the correct results', () => {
-    const gen = artistFetch(actions.artistSingleFetchStart(artist.name))
-    expect(gen.next().value).toEqual(select(selectAuthToken))
-    expect(gen.next(authToken).value).toEqual(call(getArtist, authToken, artist.name))
-    expect(gen.next(artist).value).toEqual(put(actions.artistSingleFetchLoadSuccess(artist)))
-  })
-
-  it('yields error action on throw', () => {
-    const gen = artistFetch(actions.artistSingleFetchStart(artist.name))
-    expect(gen.next().value).toEqual(select(selectAuthToken))
-    expect(gen.next(authToken).value).toEqual(call(getArtist, authToken, artist.name))
-    const someError = {
-      message: 'Authentication failed',
-    }
-    expect(gen.throw(someError).value).toEqual(put(actions.artistsFetchError(someError)))
-  })
-})
-
-describe('artistsCreate', () => {
-  const authToken = 'JWT 123123'
-  const name = 'Name'
-  const url = 'https://name.com'
-
-  it('yields the correct results', () => {
-    const gen = artistsCreate(actions.artistsCreateStart(name, url))
-    expect(gen.next().value).toEqual(select(selectAuthToken))
-    expect(gen.next(authToken).value).toEqual(call(createArtists, authToken, name, url))
-    expect(gen.next().value).toEqual(put(actions.artistsCreateSuccess(name, url)))
-  })
-
-  it('yields error action on throw', () => {
-    const gen = artistsCreate(actions.artistsCreateStart(name, url))
-    expect(gen.next().value).toEqual(select(selectAuthToken))
-    expect(gen.next(authToken).value).toEqual(call(createArtists, authToken, name, url))
-    const someError = {
-      message: 'Authentication failed',
-    }
-    expect(gen.throw(someError).value).toEqual(put(actions.artistsFetchError(someError)))
+    it('yields error action on throw', () => {
+      const gen = saga(initialActionCreator(...actionCreatorArguments))
+      expect(gen.next().value).toEqual(select(selectAuthToken))
+      expect(gen.next(authToken).value).toEqual(call(apiCall, authToken, ...actionCreatorArguments))
+      const someError = {
+        message: 'Authentication failed',
+      }
+      expect(gen.throw(someError).value).toEqual(put(actions.artistsFetchError(someError)))
+    })
   })
 })
 

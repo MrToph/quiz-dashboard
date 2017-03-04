@@ -23,7 +23,8 @@ function artistsReducer(state = defaultArtistsState, action) {
   switch (action.type) {
     case ActionTypes.artistsFetchStart:
     case ActionTypes.artistSingleFetchStart:
-    case ActionTypes.artistUpdateStart: {
+    case ActionTypes.artistUpdateStart:
+    case ActionTypes.artistDeleteStart: {
       return {
         ...state,
         isLoading: true,
@@ -105,6 +106,20 @@ function artistsReducer(state = defaultArtistsState, action) {
       }
       if (oldName !== name) delete newArtistsByName[oldName]
 
+      return {
+        ...state,
+        isLoading: false,
+        artists: newArtists,
+        artistsByName: newArtistsByName,
+      }
+    }
+    case ActionTypes.artistDeleteSuccess: {
+      const { name } = action.payload
+      const newArtists = state.artists.filter(artistName => artistName !== name)
+      const newArtistsByName = {
+        ...state.artistsByName,
+        [name]: undefined,
+      }
       return {
         ...state,
         isLoading: false,

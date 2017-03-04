@@ -4,7 +4,22 @@ body {
   font-family: sans-serif;
 }
 
-.ui.button.button--no-style {
-  background-color: white;
+.ui.button.button--icon {
+  background-color: transparent;
   border: 1px solid rgba(34,36,38,.15);
+}
+
+.button--simple {
+    background: transparent;
+    border: 0px;
+}
+
+.button--simple:focus {outline:0;}
+
+.button--gray {
+    color: gray;
+}
+
+.button--gray:hover {
+    color: black;
 }

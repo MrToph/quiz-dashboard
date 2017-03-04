@@ -10,6 +10,8 @@ var ActionTypes = { // eslint-disable-line
   artistsCreateSuccess: 'ARTISTS_CREATE_SUCCESS',
   artistUpdateStart: 'ARTIST_UPDATE_START',
   artistUpdateSuccess: 'ARTIST_UPDATE_SUCCESS',
+  artistDeleteStart: 'ARTIST_DELETE_START',
+  artistDeleteSuccess: 'ARTIST_DELETE_SUCCESS',
 }
 
 export default ActionTypes
@@ -75,5 +77,20 @@ export const artistUpdateSuccess = (oldName, name, url) => ({
     oldName,
     name,
     url,
+  },
+})
+
+export const artistDeleteStart = name => ({
+  type: ActionTypes.artistDeleteStart,
+  payload: {
+    name,
+  },
+})
+
+
+export const artistDeleteSuccess = name => ({
+  type: ActionTypes.artistDeleteSuccess,
+  payload: {
+    name,
   },
 })

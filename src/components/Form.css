@@ -1,3 +1,6 @@
-.LoginForm{
-    width: 450px;
+.buttonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
 }

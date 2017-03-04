@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import FormTextField from './FormTextField'
+import DeleteButton from './DeleteButton'
 import './Form.css'
 
 export default class Form extends Component {
@@ -8,6 +9,7 @@ export default class Form extends Component {
     title: PropTypes.string.isRequired,
     submitText: PropTypes.string,
     onSubmit: PropTypes.func.isRequired,
+    onDelete: PropTypes.func,
     validationFunc: PropTypes.func.isRequired,
     errors: PropTypes.objectOf(PropTypes.string).isRequired,  // eslint-disable-line
     isLoading: PropTypes.bool,  // eslint-disable-line
@@ -85,7 +87,7 @@ export default class Form extends Component {
   }
 
   render() {
-    const { title, inputs, standalone, submitText } = this.props
+    const { title, inputs, standalone, submitText, onDelete } = this.props
     const { errors, isLoading } = this.state
     return (
       <form
@@ -108,13 +110,16 @@ export default class Form extends Component {
               onChange={this.onChange}
             />)
         }
-        <button
-          className={classnames('ui submit button', {
-            positive: !standalone,
-            primary: standalone,
-          })}
-          type="submit"
-        >{submitText}</button>
+        <div className="buttonContainer">
+          <button
+            className={classnames('ui submit button', {
+              positive: !standalone,
+              primary: standalone,
+            })}
+            type="submit"
+          >{submitText}</button>
+          {onDelete && <DeleteButton onClick={onDelete} />}
+        </div>
         { errors.form && <span className="ui error message">{errors.form}</span> }
       </form>
     )
