@@ -1,5 +1,6 @@
 import fetchMock from 'fetch-mock'
-import { url, authenticate, signup } from './index'
+import { url } from './helpers'
+import { authenticate, signup } from './index'
 
 function setupMocks() {
   fetchMock.post(`${url}/authenticate`, JSON.stringify({

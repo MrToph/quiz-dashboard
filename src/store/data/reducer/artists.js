@@ -1,6 +1,5 @@
-import { combineReducers } from 'redux'
-import { extractServerErrors } from '../../api/Error'
-import ActionTypes from './actions'
+import { extractServerErrors } from '../../../api/Error'
+import ActionTypes from '../actions/artists'
 
 export const defaultArtistsState = {
   isLoading: false,
@@ -133,12 +132,4 @@ function artistsReducer(state = defaultArtistsState, action) {
   }
 }
 
-const reducers = combineReducers({
-  artists: artistsReducer,
-})
-
-export const defaultState = {
-  artists: defaultArtistsState,
-}
-
-export default reducers
+export default artistsReducer

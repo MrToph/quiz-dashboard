@@ -4,7 +4,7 @@ import ArtistRow from '../components/ArtistRow'
 import AddItemRow from '../components/AddItemRow'
 import Form from '../components/Form'
 import { selectArtists, selectArtistForm } from '../store/selectors'
-import { artistsFetchStart, artistsCreateStart } from '../store/data/actions'
+import { artistsFetchStart, artistsCreateStart } from '../store/data/actions/artists'
 import { validateArtistInput } from '../shared/validations'
 
 export const artistsFormInputs = [

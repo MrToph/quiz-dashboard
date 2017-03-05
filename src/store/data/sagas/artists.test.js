@@ -1,8 +1,8 @@
 import { call, put, select } from 'redux-saga/effects'
-import * as actions from './actions'
-import { artistFetch, artistsFetch, artistsCreate, artistUpdate, artistDelete } from './sagas'
-import { getArtist, getArtists, createArtists, updateArtist, deleteArtist } from '../../api'
-import { selectAuthToken } from '../../store/selectors'
+import * as actions from '../actions/artists'
+import { artistFetch, artistsFetch, artistsCreate, artistUpdate, artistDelete } from './artists'
+import { getArtist, getArtists, createArtists, updateArtist, deleteArtist } from '../../../api'
+import { selectAuthToken } from '../../../store/selectors'
 
 const authToken = 'JWT 123456'
 

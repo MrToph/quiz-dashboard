@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import Form from '../components/Form'
 import { selectArtist, selectArtistForm } from '../store/selectors'
-import { artistSingleFetchStart, artistUpdateStart, artistDeleteStart } from '../store/data/actions'
+import { artistSingleFetchStart, artistUpdateStart, artistDeleteStart } from '../store/data/actions/artists'
 import { validateArtistInput } from '../shared/validations'
 import { artistsFormInputs } from './Artists'
 

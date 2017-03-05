@@ -1,12 +1,9 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects'
-import ActionTypes, * as actions from './actions'
-import { selectAuthToken } from '../selectors'
+import ActionTypes, * as actions from '../actions/artists'
+import { selectAuthToken } from '../../selectors'
 
-import { getArtist, getArtists, createArtists, updateArtist, deleteArtist } from '../../api'
+import { getArtist, getArtists, createArtists, updateArtist, deleteArtist } from '../../../api'
 
-/* ************* */
-/* ** ARTISTS ** */
-/* ************* */
 export function* artistFetch(action) {
   try {
     const { name } = action.payload
