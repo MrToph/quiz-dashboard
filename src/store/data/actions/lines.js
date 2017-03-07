@@ -20,10 +20,10 @@ export const linesFetchStart = () => ({
   type: ActionTypes.linesFetchStart,
 })
 
-export const lineSingleFetchStart = name => ({
+export const lineSingleFetchStart = id => ({
   type: ActionTypes.lineSingleFetchStart,
   payload: {
-    name,
+    id,
   },
 })
 
@@ -46,51 +46,49 @@ export const linesFetchError = error => ({
   payload: error,
 })
 
-export const linesCreateStart = (name, url) => ({
+export const linesCreateStart = payload => ({
   type: ActionTypes.linesCreateStart,
   payload: {
-    name,
-    url,
+    ...payload,
+    active: !!payload.active,
   },
 })
 
-export const linesCreateSuccess = (name, url) => ({
+export const linesCreateSuccess = payload => ({
   type: ActionTypes.linesCreateSuccess,
   payload: {
-    name,
-    url,
+    ...payload,
+    active: !!payload.active,
   },
 })
 
-export const linesUpdateStart = (oldName, name, url) => ({
+export const linesUpdateStart = (id, payload) => ({
   type: ActionTypes.linesUpdateStart,
   payload: {
-    oldName,
-    name,
-    url,
+    ...payload,
+    active: !!payload.active,
   },
 })
 
-export const linesUpdateSuccess = (oldName, name, url) => ({
+export const linesUpdateSuccess = (id, payload) => ({
   type: ActionTypes.linesUpdateSuccess,
   payload: {
-    oldName,
-    name,
-    url,
+    ...payload,
+    active: !!payload.active,
   },
 })
 
-export const linesDeleteStart = name => ({
+export const linesDeleteStart = id => ({
   type: ActionTypes.linesDeleteStart,
   payload: {
-    name,
+    id,
   },
 })
 
 
-export const linesDeleteSuccess = name => ({
+export const linesDeleteSuccess = id => ({
   type: ActionTypes.linesDeleteSuccess,
   payload: {
-    name,
+    id,
   },
 })

@@ -70,6 +70,7 @@ function artistsReducer(state = defaultArtistsState, action) {
       const errors = extractServerErrors(action)
       return {
         ...state,
+        formOpen: true,
         serverErrors: errors,
         isLoading: false,
       }

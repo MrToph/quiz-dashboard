@@ -17,6 +17,8 @@ export const linesFormInputs = [
   {
     name: 'artist',
     label: 'Artist Name',
+    type: 'select',
+    allowedValues: [],  // will be loaded
   },
   {
     name: 'songTitle',
@@ -30,6 +32,7 @@ export const linesFormInputs = [
     name: 'language',
     label: 'Language',
     type: 'select',
+    allowedValues: ['de', 'en'],
   },
   {
     name: 'url',
@@ -63,12 +66,15 @@ export class Lines extends Component {
     this.props.fetchLines()
   }
 
-  onAddRow = (name, url) => {
-    this.props.createLine(name, url)
+  onAddRow = (text, artist, songTitle, album, language, url, active) => {
+    this.props.createLine({
+      text, artist, songTitle, album, language, url, active,
+    })
   }
 
   render() {
     const { errors, isLoading, formOpen } = this.props.lineForm
+    linesFormInputs.find(field => field.name === 'artist').allowedValues = this.props.artists
     return (
       <div className="ui relaxed divided list">
         {

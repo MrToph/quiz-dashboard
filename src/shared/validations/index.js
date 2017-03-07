@@ -36,7 +36,7 @@ export function validateArtistInput(data) {
 }
 
 export function validateLineInput(data, artists) {
-  const errors = checkRequiredFields(data, ['text', 'artist', 'songTitle', 'language', 'active'])
+  const errors = checkRequiredFields(data, ['text', 'artist', 'songTitle', 'language'])
 
   if (!artists.find(artist => artist === data.artist)) {
     errors.artist = 'Artist invalid. Create the artist first.'

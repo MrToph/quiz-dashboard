@@ -42,6 +42,7 @@ export class Artists extends Component {
 
   render() {
     const { errors, isLoading, formOpen } = this.props.artistForm
+    console.log(errors, formOpen)
     return (
       <div className="ui relaxed divided list">
         {

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
-import FormTextField from './FormTextField'
+import FormField from './FormField'
 import DeleteButton from './DeleteButton'
 import './Form.css'
 
@@ -18,6 +18,7 @@ export default class Form extends Component {
       name: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
       type: PropTypes.string,
+      allowedValues: PropTypes.arrayOf(PropTypes.string.isRequired),
     }).isRequired).isRequired,
     values: PropTypes.objectOf(PropTypes.string.isRequired),
   }
@@ -30,10 +31,10 @@ export default class Form extends Component {
   constructor(props) {
     super(props)
     let state = {
-      errors: {},
-      isLoading: false,
+      errors: props.errors,
+      isLoading: props.isLoading,
     }
-    props.inputs.forEach((input) => { state[input.name] = '' })  // store text field values
+    props.inputs.forEach((input) => { state[input.name] = '' })  // store field values
     state = {
       ...state,
       ...props.values,
@@ -42,12 +43,14 @@ export default class Form extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // always update latest errors and isLoading
     this.setState({
       errors: {
         ...this.state.errors, ...nextProps.errors,
       },
       isLoading: nextProps.isLoading,
     })
+    // but we don't want to override state (where user input is stored) when values didn't change
     if (nextProps.values !== this.props.values) {
       this.setState({
         ...nextProps.values,
@@ -69,10 +72,10 @@ export default class Form extends Component {
     }
   }
 
-  onChange = (e) => {
+  onChange = (name, value) => {
     this.setState({
-      [e.target.name]: e.target.value,
-      errors: { ...this.state.errors, [e.target.name]: undefined },
+      [name]: value,
+      errors: { ...this.state.errors, [name]: undefined },
     })
   }
 
@@ -91,7 +94,7 @@ export default class Form extends Component {
     const { errors, isLoading } = this.state
     return (
       <form
-        className={classnames('ui form segment', {
+        className={classnames('Form ui form segment', {
           error: Object.keys(errors).length > 0,
           loading: isLoading,
           green: !standalone,
@@ -100,13 +103,14 @@ export default class Form extends Component {
       >
         <h4>{ title }</h4>
         {
-            inputs.map(input => <FormTextField
+            inputs.map(input => <FormField
               key={input.name}
               field={input.name}
               label={input.label}
               type={input.type}
-              error={errors[input.name]}
+              allowedValues={input.allowedValues}
               value={this.state[input.name]}
+              error={errors[input.name]}
               onChange={this.onChange}
             />)
         }
