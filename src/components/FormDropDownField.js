@@ -1,3 +1,4 @@
+/* global $ */
 import React, { PropTypes } from 'react'
 
 function getIconName(fieldName) {
@@ -5,16 +6,25 @@ function getIconName(fieldName) {
 }
 
 export default class FormDropDownField extends React.Component {
-  onChangeWrapper = (selection) => {
-    this.props.onChange(this.props.field, selection)
+  componentWillReceiveProps(nextProps) {
+    if (this.props.value !== nextProps.value) {
+      $(this.ref).dropdown('set selected', nextProps.value)
+    }
   }
+
   onRef = (ref) => {
     if (ref) {
-        $(ref).dropdown({    // eslint-disable-line
-          action: 'activate',   // http://semantic-ui.com/modules/dropdown.html#/usage => "Specifying Select Action"
-          onChange: this.onChangeWrapper,
-        })
+      this.ref = ref
+      $(ref).dropdown({
+        action: 'activate',   // http://semantic-ui.com/modules/dropdown.html#/usage => "Specifying Select Action"
+        onChange: this.onChangeWrapper,
+      })
+      .dropdown('set selected', this.props.value)
     }
+  }
+
+  onChangeWrapper = (selection) => {
+    this.props.onChange(this.props.field, selection)
   }
 
   render() {
@@ -27,7 +37,7 @@ export default class FormDropDownField extends React.Component {
         <span className="text">{label}</span>
         <div className="menu">
           {
-            allowedValues.map(val => <div key={val} className="item">{val}</div>)
+            allowedValues.map(val => <div key={val} data-value={val} className="item">{val}</div>)
           }
         </div>
       </div>
@@ -38,6 +48,7 @@ export default class FormDropDownField extends React.Component {
 FormDropDownField.propTypes = {
   field: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  value: PropTypes.string,
   allowedValues: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   onChange: PropTypes.func.isRequired,
 }
