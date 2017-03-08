@@ -8,9 +8,9 @@ export default class ApiError extends Error {
 }
 
 export function extractServerErrors(action) {
-  const error = action.payload
+  const payload = action.payload
   let errors = []
-  if (error.errors) errors = error.errors.slice()
-  else errors = [error.message]
+  if (payload.errors) errors = payload.errors.slice()
+  else errors = [payload.message]
   return errors
 }

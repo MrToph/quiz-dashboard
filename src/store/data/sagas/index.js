@@ -1,3 +1,6 @@
 import artistWatchers from './artists'
+import linesWatchers from './lines'
 
-export default artistWatchers
+const dataWatchers = artistWatchers.concat(linesWatchers)
+
+export default dataWatchers

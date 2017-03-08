@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
+import { isEqual } from 'lodash'
 import FormField from './FormField'
 import DeleteButton from './DeleteButton'
 import './Form.css'
@@ -20,7 +21,7 @@ export default class Form extends Component {
       type: PropTypes.string,
       allowedValues: PropTypes.arrayOf(PropTypes.string.isRequired),
     }).isRequired).isRequired,
-    values: PropTypes.objectOf(PropTypes.string.isRequired),
+    values: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool]).isRequired),
   }
 
   static defaultProps = {
@@ -51,7 +52,7 @@ export default class Form extends Component {
       isLoading: nextProps.isLoading,
     })
     // but we don't want to override state (where user input is stored) when values didn't change
-    if (nextProps.values !== this.props.values) {
+    if (!isEqual(nextProps.values, this.props.values)) {
       this.setState({
         ...nextProps.values,
       })

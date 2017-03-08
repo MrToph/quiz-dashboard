@@ -34,10 +34,10 @@ export const linesFetchLoadSuccess = lines => ({
   },
 })
 
-export const lineSingleFetchLoadSuccess = lines => ({
+export const lineSingleFetchLoadSuccess = line => ({
   type: ActionTypes.lineSingleFetchLoadSuccess,
   payload: {
-    lines,
+    line,
   },
 })
 
@@ -46,11 +46,16 @@ export const linesFetchError = error => ({
   payload: error,
 })
 
-export const linesCreateStart = payload => ({
+export const linesCreateStart = (text, artist, songTitle, album, language, url, active) => ({
   type: ActionTypes.linesCreateStart,
   payload: {
-    ...payload,
-    active: !!payload.active,
+    text,
+    artist,
+    songTitle,
+    album,
+    language,
+    moreUrl: url,
+    active: !!active,
   },
 })
 
@@ -62,15 +67,21 @@ export const linesCreateSuccess = payload => ({
   },
 })
 
-export const linesUpdateStart = (id, payload) => ({
+export const linesUpdateStart = (id, text, artist, songTitle, album, language, url, active) => ({
   type: ActionTypes.linesUpdateStart,
   payload: {
-    ...payload,
-    active: !!payload.active,
+    id,
+    text,
+    artist,
+    songTitle,
+    album,
+    language,
+    moreUrl: url,
+    active: !!active,
   },
 })
 
-export const linesUpdateSuccess = (id, payload) => ({
+export const linesUpdateSuccess = payload => ({
   type: ActionTypes.linesUpdateSuccess,
   payload: {
     ...payload,

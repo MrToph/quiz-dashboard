@@ -35,7 +35,7 @@ export const linesFormInputs = [
     allowedValues: ['de', 'en'],
   },
   {
-    name: 'url',
+    name: 'moreUrl',
     label: 'More-URL',
   },
   {
@@ -67,9 +67,7 @@ export class Lines extends Component {
   }
 
   onAddRow = (text, artist, songTitle, album, language, url, active) => {
-    this.props.createLine({
-      text, artist, songTitle, album, language, url, active,
-    })
+    this.props.createLine(text, artist, songTitle, album, language, url, active)
   }
 
   render() {

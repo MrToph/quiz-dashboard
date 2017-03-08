@@ -9,6 +9,7 @@ import ActiveRoute from './routes/Active'
 import PendingRoute from './routes/Pending'
 import ArtistsRoute from './routes/Artists'
 import ArtistProfile from './routes/ArtistProfile'
+import LineProfile from './routes/LineProfile'
 import Route404 from './routes/404'
 import { createAppStarted } from './store/navigation/actions'
 import './App.css'
@@ -31,6 +32,7 @@ export class App extends Component {
           <Route exact path="/login" component={LoginRoute} />
           <Route exact path="/signup" component={SignupRoute} />
           <PrivateRoute exact path="/" component={ActiveRoute} />
+          <PrivateRoute exact path="/lines/:lineId" component={LineProfile} />
           <PrivateRoute exact path="/pending" component={PendingRoute} />
           <PrivateRoute exact path="/artists" component={ArtistsRoute} />
           <PrivateRoute exact path="/artists/:artistName" component={ArtistProfile} />

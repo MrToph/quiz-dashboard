@@ -22,6 +22,105 @@ export const defaultLinesState = {
 
 function linesReducer(state = defaultLinesState, action) {
   switch (action.type) {
+    case ActionTypes.linesFetchStart:
+    case ActionTypes.lineSingleFetchStart:
+    case ActionTypes.lineUpdateStart:
+    case ActionTypes.lineDeleteStart: {
+      return {
+        ...state,
+        isLoading: true,
+        serverErrors: [],
+      }
+    }
+    case ActionTypes.linesCreateStart: {
+      return {
+        ...state,
+        formOpen: true,  /* set to true, so false can get injected on success */
+        isLoading: true,
+        serverErrors: [],
+      }
+    }
+    case ActionTypes.linesFetchLoadSuccess: {
+      const { lines } = action.payload
+      const newLines = lines.map(line => line.id)
+      const newLinesById = { }
+      lines.forEach((line) => {
+        newLinesById[line.id] = line
+      })
+      return {
+        ...state,
+        isLoading: false,
+        lines: newLines,
+        linesById: newLinesById,
+      }
+    }
+    case ActionTypes.lineSingleFetchLoadSuccess: {
+      const { line } = action.payload
+      const newLines = state.lines.find(id => id === line.id) ? state.lines : state.lines.concat([line.id])
+      const newLinesById = {
+        ...state.linesById,
+        [line.id]: line,
+      }
+      return {
+        ...state,
+        isLoading: false,
+        lines: newLines,
+        linesById: newLinesById,
+      }
+    }
+    case ActionTypes.linesFetchError: {
+      const errors = extractServerErrors(action)
+      return {
+        ...state,
+        formOpen: true,
+        serverErrors: errors,
+        isLoading: false,
+      }
+    }
+    case ActionTypes.linesCreateSuccess: {
+      // if server responded with success, add it to our list without fetching the list from the server again
+      const line = action.payload
+      const newLines = [...state.lines, line.id]
+      const newLinesById = {
+        ...state.linesById,
+        [line.id]: line,
+      }
+      return {
+        ...state,
+        formOpen: false,  /* close form on success */
+        isLoading: false,
+        lines: newLines,
+        linesById: newLinesById,
+      }
+    }
+    case ActionTypes.linesUpdateSuccess: {
+      // id never changes
+      const line = action.payload
+      const newLinesById = {
+        ...state.linesById,
+        [line.id]: line,
+      }
+
+      return {
+        ...state,
+        isLoading: false,
+        linesById: newLinesById,
+      }
+    }
+    case ActionTypes.linesDeleteSuccess: {
+      const { id } = action.payload
+      const newLines = state.lines.filter(lineId => lineId !== id)
+      const newLinesById = {
+        ...state.linesById,
+        [id]: undefined,
+      }
+      return {
+        ...state,
+        isLoading: false,
+        lines: newLines,
+        linesById: newLinesById,
+      }
+    }
     default: {
       return state
     }
