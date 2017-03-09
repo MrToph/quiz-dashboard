@@ -24,15 +24,15 @@ export default class FormDropDownField extends React.Component {
   }
 
   onChangeWrapper = (selection) => {
-    this.props.onChange(this.props.field, selection)
+    this.props.onChange(this.props.name, selection)
   }
 
   render() {
-    const { field, allowedValues, label } = this.props
-    const iconName = getIconName(field)
+    const { name, allowedValues, label } = this.props
+    const iconName = getIconName(name)
     return (
       <div ref={this.onRef} className="ui floating dropdown labeled search icon button">
-        <input type="hidden" name={field} />
+        <input type="hidden" name={name} />
         <i className={`${iconName} icon`} />
         <span className="text">{label}</span>
         <div className="menu">
@@ -46,7 +46,7 @@ export default class FormDropDownField extends React.Component {
 }
 
 FormDropDownField.propTypes = {
-  field: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   value: PropTypes.string,
   allowedValues: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,

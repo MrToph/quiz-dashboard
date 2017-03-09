@@ -9,28 +9,28 @@ export default class FormField extends React.Component {
   }
 
   render() {
-    const { field, value, label, error, type, onChange, allowedValues } = this.props
+    const { name, value, label, error, type } = this.props
     let fieldComponent
     switch (type) {
       case 'select': {
-        fieldComponent = <FormDropDownField field={field} label={label} onChange={onChange} value={value} allowedValues={allowedValues} />
+        fieldComponent = <FormDropDownField {...this.props} />
         break
       }
       case 'textarea': {
-        fieldComponent = <textarea name={field} placeholder={label} onChange={this.onChangeWrapper} value={value} rows="5" />
+        fieldComponent = <textarea name={name} placeholder={label} onChange={this.onChangeWrapper} value={value} rows="5" />
         break
       }
       case 'checkbox': {
-        fieldComponent = <input type={type} name={field} placeholder={label} onChange={this.onChangeWrapper} checked={value} />
+        fieldComponent = <input type={type} name={name} placeholder={label} onChange={this.onChangeWrapper} checked={value} />
         break
       }
       default: {
-        fieldComponent = <input type={type} name={field} placeholder={label} onChange={this.onChangeWrapper} value={value} />
+        fieldComponent = <input type={type} name={name} placeholder={label} onChange={this.onChangeWrapper} value={value} />
       }
     }
     return (
       <div className={classnames('field', { error })}>
-        <label htmlFor={field}>{label}</label>
+        <label htmlFor={name}>{label}</label>
         {
           fieldComponent
         }
@@ -41,9 +41,8 @@ export default class FormField extends React.Component {
 }
 
 FormField.propTypes = {
-  field: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]).isRequired,
-  allowedValues: PropTypes.arrayOf(PropTypes.string.isRequired),
   label: PropTypes.string.isRequired,
   error: PropTypes.string,
   type: PropTypes.string.isRequired,

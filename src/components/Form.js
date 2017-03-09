@@ -106,10 +106,9 @@ export default class Form extends Component {
         {
             inputs.map(input => <FormField
               key={input.name}
-              field={input.name}
-              label={input.label}
-              type={input.type}
-              allowedValues={input.allowedValues}
+              {
+                ...input
+              }
               value={this.state[input.name]}
               error={errors[input.name]}
               onChange={this.onChange}
