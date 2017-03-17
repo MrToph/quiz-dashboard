@@ -1,3 +1,4 @@
+import qparams from 'query-params'
 import { parseAndHandleErrors, configureGetOptions, configurePostOptions,
   configurePatchOptions, configureDeleteOptions, url } from './helpers'
 
@@ -23,9 +24,13 @@ export function getLine(apiToken, id) {
   .then(response => extractLineFields(response.line))
 }
 
-export function getLines(apiToken) {
+export function getLines(apiToken, lineStatus, fromId) {
   const headers = configureGetOptions(apiToken)
-  return fetch(`${url}/lines`, {
+  const params = {
+    lineStatus: !!lineStatus,
+    fromId: fromId || null,
+  }
+  return fetch(`${url}/lines?${qparams.encode(params)}`, {
     ...headers,
   })
   .then(parseAndHandleErrors)

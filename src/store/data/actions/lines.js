@@ -16,8 +16,12 @@ var ActionTypes = { // eslint-disable-line
 
 export default ActionTypes
 
-export const linesFetchStart = () => ({
+export const linesFetchStart = (lineStatus, isInitial = false) => ({
   type: ActionTypes.linesFetchStart,
+  payload: {
+    lineStatus: !!lineStatus,
+    isInitial,
+  },
 })
 
 export const lineSingleFetchStart = id => ({
@@ -27,10 +31,11 @@ export const lineSingleFetchStart = id => ({
   },
 })
 
-export const linesFetchLoadSuccess = lines => ({
+export const linesFetchLoadSuccess = (lines, isInitial) => ({
   type: ActionTypes.linesFetchLoadSuccess,
   payload: {
     lines,
+    isInitial,
   },
 })
 

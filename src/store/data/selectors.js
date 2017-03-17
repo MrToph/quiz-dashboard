@@ -1,3 +1,5 @@
+import { findLast } from 'lodash'
+
 export const selectArtist = (state, name) => {
   if (state.artists.artistsByName[name]) return Object.assign({}, state.artists.artistsByName[name])
   return null
@@ -22,11 +24,22 @@ export const selectLine = (state, id) => {
   return null
 }
 
-export const selectLines = (state) => {
+export const selectLines = (state, lineStatus) => {
   const lines = []
-  state.lines.lines.forEach(id => lines.push(Object.assign({}, state.lines.linesById[id])))
+  state.lines.lines.forEach((id) => {
+    const line = Object.assign({}, state.lines.linesById[id])
+    if (line.active === lineStatus) lines.push(line)
+  })
   return lines
 }
+
+export const selectLatestLineId = (state, lineStatus) => {
+  // lines are sorted ascending, we want the biggest id, so search from right
+  const lastLineNameWithMatchingStatus = findLast(state.lines.lines, lineId => state.lines.linesById[lineId].active === lineStatus)
+  return lastLineNameWithMatchingStatus && state.lines.linesById[lastLineNameWithMatchingStatus].id
+}
+
+export const selectHasMoreLines = state => state.lines.hasMoreLines && !state.lines.isLoading
 
 export const selectLineForm = state => ({
   errors: { form: state.lines.serverErrors.join('\n') },

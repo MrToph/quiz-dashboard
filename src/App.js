@@ -5,8 +5,8 @@ import TabBar from './components/TabBar'
 import PrivateRoute from './routes/PrivateRoute'
 import LoginRoute from './routes/Login'
 import SignupRoute from './routes/Signup'
-import ActiveRoute from './routes/Active'
-import PendingRoute from './routes/Pending'
+import ActiveRoute from './routes/ActiveLines'
+import PendingRoute from './routes/PendingLines'
 import ArtistsRoute from './routes/Artists'
 import ArtistProfile from './routes/ArtistProfile'
 import LineProfile from './routes/LineProfile'
@@ -32,8 +32,8 @@ export class App extends Component {
           <Route exact path="/login" component={LoginRoute} />
           <Route exact path="/signup" component={SignupRoute} />
           <PrivateRoute exact path="/" component={ActiveRoute} />
-          <PrivateRoute exact path="/lines/:lineId" component={LineProfile} />
           <PrivateRoute exact path="/pending" component={PendingRoute} />
+          <PrivateRoute exact path="/lines/:lineId" component={LineProfile} />
           <PrivateRoute exact path="/artists" component={ArtistsRoute} />
           <PrivateRoute exact path="/artists/:artistName" component={ArtistProfile} />
           <PrivateRoute component={Route404} />

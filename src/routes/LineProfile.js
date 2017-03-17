@@ -6,7 +6,7 @@ import { selectLine, selectLineForm, selectArtistsNames } from '../store/selecto
 import { artistsFetchStart } from '../store/data/actions/artists'
 import { lineSingleFetchStart, linesUpdateStart, linesDeleteStart } from '../store/data/actions/lines'
 import { validateLineInput } from '../shared/validations'
-import { linesFormInputs } from './Active'
+import { linesFormInputs } from '../components/LinesList'
 
 export class LineProfile extends Component {
   static propTypes = {

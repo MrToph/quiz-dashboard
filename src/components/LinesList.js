@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import InfiniteScroll from 'react-infinite-scroller'
 import LineRow from '../components/LineRow'
 import AddItemRow from '../components/AddItemRow'
 import Form from '../components/Form'
-import { selectArtistsNames, selectLines, selectLineForm } from '../store/selectors'
+import { selectArtistsNames, selectLines, selectLineForm, selectHasMoreLines } from '../store/selectors'
 import { artistsFetchStart } from '../store/data/actions/artists'
 import { linesFetchStart, linesCreateStart } from '../store/data/actions/lines'
 import { validateLineInput } from '../shared/validations'
@@ -18,7 +19,7 @@ export const linesFormInputs = [
     name: 'artist',
     label: 'Artist Name',
     type: 'select',
-    allowedValues: [],  // will be loaded
+    allowedValues: [],  // will be loaded through fetchArtists
   },
   {
     name: 'songTitle',
@@ -56,14 +57,16 @@ export class Lines extends Component {
       errors: PropTypes.objectOf(PropTypes.string).isRequired,
       formOpen: PropTypes.bool.isRequired,
     }).isRequired,
+    hasMoreLines: PropTypes.bool.isRequired,
     fetchArtists: PropTypes.func.isRequired,
-    fetchLines: PropTypes.func.isRequired,
+    fetchLinesByStatus: PropTypes.func.isRequired,
     createLine: PropTypes.func.isRequired,
+    displayLineStatus: PropTypes.bool,
   }
 
   componentDidMount() {
     this.props.fetchArtists()
-    this.props.fetchLines()
+    this.props.fetchLinesByStatus(this.props.displayLineStatus, true)
   }
 
   onAddRow = (text, artist, songTitle, album, language, url, active) => {
@@ -74,10 +77,13 @@ export class Lines extends Component {
     const { errors, isLoading, formOpen } = this.props.lineForm
     linesFormInputs.find(field => field.name === 'artist').allowedValues = this.props.artists
     return (
-      <div className="ui relaxed divided list">
-        {
-            this.props.lines.map(line => <LineRow key={line.id} {...line} />)
-        }
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={() => this.props.hasMoreLines && this.props.fetchLinesByStatus(this.props.displayLineStatus)}
+        hasMore={this.props.hasMoreLines}
+        loader={<div className="loader">Loading ...</div>}
+        className="ui relaxed divided list"
+      >
         <AddItemRow formOpen={formOpen}>
           <Form
             onSubmit={this.onAddRow}
@@ -88,19 +94,23 @@ export class Lines extends Component {
             validationFunc={data => validateLineInput(data, this.props.artists)}
           />
         </AddItemRow>
-      </div>
+        {
+          this.props.lines.map(line => <LineRow key={line.id} {...line} />)
+        }
+      </InfiniteScroll>
     )
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
   artists: selectArtistsNames(state),
-  lines: selectLines(state),
+  lines: selectLines(state, ownProps.displayLineStatus),
   lineForm: selectLineForm(state),
+  hasMoreLines: selectHasMoreLines(state),
 })
 
 export default connect(mapStateToProps, {
   fetchArtists: artistsFetchStart,
-  fetchLines: linesFetchStart,
+  fetchLinesByStatus: linesFetchStart,
   createLine: linesCreateStart,
 })(Lines)

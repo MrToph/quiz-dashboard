@@ -4,8 +4,11 @@ import ActionTypes from '../actions/lines'
 export const defaultLinesState = {
   isLoading: false,
   formOpen: false,
+  hasMoreLines: false,
   serverErrors: [],
-  lines: ['id31415'],
+  lines: [
+    'id31415',
+  ],
   linesById: {
     id31415: {
       id: 'id31415',
@@ -18,6 +21,10 @@ export const defaultLinesState = {
       active: false,
     },
   },
+}
+
+function sortLines(lines) {
+  lines.sort((l1, l2) => l1.localeCompare(l2)) // ascending
 }
 
 function linesReducer(state = defaultLinesState, action) {
@@ -41,22 +48,31 @@ function linesReducer(state = defaultLinesState, action) {
       }
     }
     case ActionTypes.linesFetchLoadSuccess: {
-      const { lines } = action.payload
-      const newLines = lines.map(line => line.id)
-      const newLinesById = { }
+      const { lines, isInitial } = action.payload
+      let newLines
+      if (isInitial) newLines = lines.map(line => line.id)
+      else newLines = state.lines.concat(lines.map(line => line.id))
+      sortLines(newLines)
+
+      const newLinesById = Object.assign({}, isInitial ? { } : state.linesById)
       lines.forEach((line) => {
         newLinesById[line.id] = line
       })
+
+      const hasMoreLines = isInitial || newLines.length > state.lines.length
+
       return {
         ...state,
         isLoading: false,
         lines: newLines,
         linesById: newLinesById,
+        hasMoreLines,
       }
     }
     case ActionTypes.lineSingleFetchLoadSuccess: {
       const { line } = action.payload
       const newLines = state.lines.find(id => id === line.id) ? state.lines : state.lines.concat([line.id])
+      sortLines(newLines)
       const newLinesById = {
         ...state.linesById,
         [line.id]: line,
@@ -78,19 +94,14 @@ function linesReducer(state = defaultLinesState, action) {
       }
     }
     case ActionTypes.linesCreateSuccess: {
-      // if server responded with success, add it to our list without fetching the list from the server again
-      const line = action.payload
-      const newLines = [...state.lines, line.id]
-      const newLinesById = {
-        ...state.linesById,
-        [line.id]: line,
-      }
+      // if server responded with success, do not add it to our list, because it would break fetching more lines because id is the highest
+      // instead fetch it from server
+      const hasMoreLines = true
       return {
         ...state,
         formOpen: false,  /* close form on success */
         isLoading: false,
-        lines: newLines,
-        linesById: newLinesById,
+        hasMoreLines,
       }
     }
     case ActionTypes.linesUpdateSuccess: {

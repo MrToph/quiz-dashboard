@@ -1,6 +1,6 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects'
 import ActionTypes, * as actions from '../actions/lines'
-import { selectAuthToken } from '../../selectors'
+import { selectAuthToken, selectLatestLineId } from '../../selectors'
 
 import { getLine, getLines, createLines, updateLine, deleteLine } from '../../../api'
 
@@ -15,11 +15,13 @@ export function* lineFetch(action) {
   }
 }
 
-export function* linesFetch() {
+export function* linesFetch(action) {
   try {
+    const { lineStatus, isInitial } = action.payload
     const jwtToken = yield select(selectAuthToken)
-    const lines = yield call(getLines, jwtToken)
-    yield put(actions.linesFetchLoadSuccess(lines))
+    const latestLineId = !isInitial ? yield select(selectLatestLineId, lineStatus) : false
+    const lines = yield call(getLines, jwtToken, lineStatus, latestLineId)
+    yield put(actions.linesFetchLoadSuccess(lines, isInitial))
   } catch (e) {
     yield put(actions.linesFetchError(e))
   }
