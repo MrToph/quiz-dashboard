@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import Form from '../components/Form'
 import { selectLine, selectLineForm, selectArtistsNames } from '../store/selectors'
 import { artistsFetchStart } from '../store/data/actions/artists'
-import { lineSingleFetchStart, linesUpdateStart, linesDeleteStart } from '../store/data/actions/lines'
+import { lineSingleFetchStart, lineUpdateStart, lineDeleteStart } from '../store/data/actions/lines'
 import { validateLineInput } from '../shared/validations'
 import { linesFormInputs } from '../components/LinesList'
 
@@ -97,6 +97,6 @@ const mapStateToProps = (state, ownProps) => ({
 export default connect(mapStateToProps, {
   fetchArtists: artistsFetchStart,
   fetchLine: lineSingleFetchStart,
-  editLine: linesUpdateStart,
-  deleteLine: linesDeleteStart,
+  editLine: lineUpdateStart,
+  deleteLine: lineDeleteStart,
 })(LineProfile)

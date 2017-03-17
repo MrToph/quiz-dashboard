@@ -36,7 +36,7 @@ export const selectLines = (state, lineStatus) => {
 export const selectLatestLineId = (state, lineStatus) => {
   // lines are sorted ascending, we want the biggest id, so search from right
   const lastLineNameWithMatchingStatus = findLast(state.lines.lines, lineId => state.lines.linesById[lineId].active === lineStatus)
-  return lastLineNameWithMatchingStatus && state.lines.linesById[lastLineNameWithMatchingStatus].id
+  return lastLineNameWithMatchingStatus
 }
 
 export const selectHasMoreLines = state => state.lines.hasMoreLines && !state.lines.isLoading

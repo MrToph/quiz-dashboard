@@ -8,10 +8,10 @@ var ActionTypes = { // eslint-disable-line
   linesFetchError: 'LINES_FETCH_ERROR',
   linesCreateStart: 'LINES_CREATE_START',
   linesCreateSuccess: 'LINES_CREATE_SUCCESS',
-  linesUpdateStart: 'LINE_UPDATE_START',
-  linesUpdateSuccess: 'LINE_UPDATE_SUCCESS',
-  linesDeleteStart: 'LINE_DELETE_START',
-  linesDeleteSuccess: 'LINE_DELETE_SUCCESS',
+  lineUpdateStart: 'LINE_UPDATE_START',
+  lineUpdateSuccess: 'LINE_UPDATE_SUCCESS',
+  lineDeleteStart: 'LINE_DELETE_START',
+  lineDeleteSuccess: 'LINE_DELETE_SUCCESS',
 }
 
 export default ActionTypes
@@ -72,8 +72,8 @@ export const linesCreateSuccess = payload => ({
   },
 })
 
-export const linesUpdateStart = (id, text, artist, songTitle, album, language, url, active) => ({
-  type: ActionTypes.linesUpdateStart,
+export const lineUpdateStart = (id, text, artist, songTitle, album, language, url, active) => ({
+  type: ActionTypes.lineUpdateStart,
   payload: {
     id,
     text,
@@ -86,24 +86,24 @@ export const linesUpdateStart = (id, text, artist, songTitle, album, language, u
   },
 })
 
-export const linesUpdateSuccess = payload => ({
-  type: ActionTypes.linesUpdateSuccess,
+export const lineUpdateSuccess = payload => ({
+  type: ActionTypes.lineUpdateSuccess,
   payload: {
     ...payload,
     active: !!payload.active,
   },
 })
 
-export const linesDeleteStart = id => ({
-  type: ActionTypes.linesDeleteStart,
+export const lineDeleteStart = id => ({
+  type: ActionTypes.lineDeleteStart,
   payload: {
     id,
   },
 })
 
 
-export const linesDeleteSuccess = id => ({
-  type: ActionTypes.linesDeleteSuccess,
+export const lineDeleteSuccess = id => ({
+  type: ActionTypes.lineDeleteSuccess,
   payload: {
     id,
   },

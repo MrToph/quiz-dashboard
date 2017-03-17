@@ -43,7 +43,7 @@ export function* lineUpdate(action) {
     const line = action.payload
     const jwtToken = yield select(selectAuthToken)
     yield call(updateLine, jwtToken, line)
-    yield put(actions.linesUpdateSuccess(line))
+    yield put(actions.lineUpdateSuccess(line))
   } catch (e) {
     yield put(actions.linesFetchError(e))
   }
@@ -54,7 +54,7 @@ export function* lineDelete(action) {
     const { id } = action.payload
     const jwtToken = yield select(selectAuthToken)
     yield call(deleteLine, jwtToken, id)
-    yield put(actions.linesDeleteSuccess(id))
+    yield put(actions.lineDeleteSuccess(id))
   } catch (e) {
     yield put(actions.linesFetchError(e))
   }
@@ -73,11 +73,11 @@ export function* watchLinesCreate() {
 }
 
 export function* watchLineUpdate() {
-  yield takeLatest(ActionTypes.linesUpdateStart, lineUpdate)
+  yield takeLatest(ActionTypes.lineUpdateStart, lineUpdate)
 }
 
 export function* watchLineDelete() {
-  yield takeLatest(ActionTypes.linesDeleteStart, lineDelete)
+  yield takeLatest(ActionTypes.lineDeleteStart, lineDelete)
 }
 
 // Export watchers as default export in an array

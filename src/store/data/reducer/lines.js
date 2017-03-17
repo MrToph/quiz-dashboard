@@ -104,7 +104,7 @@ function linesReducer(state = defaultLinesState, action) {
         hasMoreLines,
       }
     }
-    case ActionTypes.linesUpdateSuccess: {
+    case ActionTypes.lineUpdateSuccess: {
       // id never changes
       const line = action.payload
       const newLinesById = {
@@ -118,7 +118,7 @@ function linesReducer(state = defaultLinesState, action) {
         linesById: newLinesById,
       }
     }
-    case ActionTypes.linesDeleteSuccess: {
+    case ActionTypes.lineDeleteSuccess: {
       const { id } = action.payload
       const newLines = state.lines.filter(lineId => lineId !== id)
       const newLinesById = {
