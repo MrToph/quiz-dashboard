@@ -19,8 +19,9 @@ export class TabBar extends React.Component {
     const path = this.props.location.pathname || '/'
     return (
       <div className="ui menu tabBar">
-        <Link className={classnames('item', { active: path === '/' })} to="/">Active Songs</Link>
-        <Link className={classnames('item', { active: path === '/pending' })} to="/pending">Pending Songs</Link>
+        <Link className={classnames('item', { active: path === '/' })} to="/">Active Lines</Link>
+        <Link className={classnames('item', { active: path === '/pending' })} to="/pending">Pending Lines</Link>
+        <Link className={classnames('item', { active: path === '/swipe' })} to="/swipe">Swipe Lines</Link>
         <Link className={classnames('item', { active: path.includes('/artists') })} to="/artists">Artists</Link>
         <div className="right menu">
           <div className="item">

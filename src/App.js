@@ -7,6 +7,7 @@ import LoginRoute from './routes/Login'
 import SignupRoute from './routes/Signup'
 import ActiveRoute from './routes/ActiveLines'
 import PendingRoute from './routes/PendingLines'
+import SwipeRoute from './routes/Swipe'
 import ArtistsRoute from './routes/Artists'
 import ArtistProfile from './routes/ArtistProfile'
 import LineProfile from './routes/LineProfile'
@@ -33,6 +34,7 @@ export class App extends Component {
           <Route exact path="/signup" component={SignupRoute} />
           <PrivateRoute exact path="/" component={ActiveRoute} />
           <PrivateRoute exact path="/pending" component={PendingRoute} />
+          <PrivateRoute exact path="/swipe" component={SwipeRoute} />
           <PrivateRoute exact path="/lines/:lineId" component={LineProfile} />
           <PrivateRoute exact path="/artists" component={ArtistsRoute} />
           <PrivateRoute exact path="/artists/:artistName" component={ArtistProfile} />

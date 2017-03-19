@@ -1,7 +1,7 @@
 import { call, put, select } from 'redux-saga/effects'
 import * as actions from '../actions/lines'
-import { lineFetch, linesFetch, linesCreate, lineUpdate, lineDelete } from './lines'
-import { getLine, getLines, createLines, updateLine, deleteLine } from '../../../api'
+import { lineFetch, linesFetch, linesCreate, lineUpdate, lineDelete, lineJudge } from './lines'
+import { getLine, getLines, createLines, updateLine, deleteLine, judgeLine } from '../../../api'
 import { selectAuthToken, selectLatestLineId } from '../../../store/selectors'
 
 const authToken = 'JWT 123456'
@@ -63,6 +63,16 @@ const tests = [
     apiReturnValue: exampleLine,
     successActionCreator: actions.lineSingleFetchLoadSuccess,
     successActionCreatorArguments: [exampleLine],
+  },
+  {
+    testName: 'lineJudge',
+    saga: lineJudge,
+    initialActionCreator: actions.lineJudgeStart,
+    initialActionCreatorArguments: [exampleLine.id, true],
+    apiCall: judgeLine,
+    apiCallArguments: [exampleLine.id, true],
+    successActionCreator: actions.lineJudgeSuccess,
+    successActionCreatorArguments: [exampleLine.id, true],
   },
 ]
 

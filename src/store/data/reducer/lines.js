@@ -39,6 +39,13 @@ function linesReducer(state = defaultLinesState, action) {
         serverErrors: [],
       }
     }
+    case ActionTypes.lineJudgeStart: {
+      return {
+        ...state,
+        isLoading: true,
+        serverErrors: [],
+      }
+    }
     case ActionTypes.linesCreateStart: {
       return {
         ...state,
@@ -119,6 +126,21 @@ function linesReducer(state = defaultLinesState, action) {
       }
     }
     case ActionTypes.lineDeleteSuccess: {
+      const { id } = action.payload
+      const newLines = state.lines.filter(lineId => lineId !== id)
+      const newLinesById = {
+        ...state.linesById,
+        [id]: undefined,
+      }
+      return {
+        ...state,
+        isLoading: false,
+        lines: newLines,
+        linesById: newLinesById,
+      }
+    }
+    case ActionTypes.lineJudgeSuccess:
+    case ActionTypes.lineJudgeSkip: {
       const { id } = action.payload
       const newLines = state.lines.filter(lineId => lineId !== id)
       const newLinesById = {

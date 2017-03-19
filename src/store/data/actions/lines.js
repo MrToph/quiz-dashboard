@@ -12,6 +12,9 @@ var ActionTypes = { // eslint-disable-line
   lineUpdateSuccess: 'LINE_UPDATE_SUCCESS',
   lineDeleteStart: 'LINE_DELETE_START',
   lineDeleteSuccess: 'LINE_DELETE_SUCCESS',
+  lineJudgeStart: 'LINE_JUDGE_START',
+  lineJudgeSuccess: 'LINE_JUDGE_SUCCESS',
+  lineJudgeSkip: 'LINE_JUDGE_SKIP',
 }
 
 export default ActionTypes
@@ -104,6 +107,29 @@ export const lineDeleteStart = id => ({
 
 export const lineDeleteSuccess = id => ({
   type: ActionTypes.lineDeleteSuccess,
+  payload: {
+    id,
+  },
+})
+
+export const lineJudgeStart = (id, acceptLine) => ({
+  type: ActionTypes.lineJudgeStart,
+  payload: {
+    id,
+    acceptLine,
+  },
+})
+
+export const lineJudgeSuccess = (id, acceptLine) => ({
+  type: ActionTypes.lineJudgeSuccess,
+  payload: {
+    id,
+    acceptLine,
+  },
+})
+
+export const lineJudgeSkip = id => ({
+  type: ActionTypes.lineJudgeSkip,
   payload: {
     id,
   },

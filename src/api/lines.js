@@ -65,3 +65,15 @@ export function deleteLine(apiToken, id) {
   })
   .then(parseAndHandleErrors)
 }
+
+export function judgeLine(apiToken, id, acceptLine) {
+  const headers = configurePostOptions(apiToken)
+  const body = {
+    acceptLine,
+  }
+  return fetch(`${url}/judgeLine/${id}`, {
+    ...headers,
+    body: JSON.stringify(body),
+  })
+  .then(parseAndHandleErrors)
+}

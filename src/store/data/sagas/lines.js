@@ -2,7 +2,7 @@ import { call, put, takeLatest, select } from 'redux-saga/effects'
 import ActionTypes, * as actions from '../actions/lines'
 import { selectAuthToken, selectLatestLineId } from '../../selectors'
 
-import { getLine, getLines, createLines, updateLine, deleteLine } from '../../../api'
+import { getLine, getLines, createLines, updateLine, deleteLine, judgeLine } from '../../../api'
 
 export function* lineFetch(action) {
   try {
@@ -60,6 +60,17 @@ export function* lineDelete(action) {
   }
 }
 
+export function* lineJudge(action) {
+  try {
+    const { id, acceptLine } = action.payload
+    const jwtToken = yield select(selectAuthToken)
+    yield call(judgeLine, jwtToken, id, acceptLine)
+    yield put(actions.lineJudgeSuccess(id, acceptLine))
+  } catch (e) {
+    yield put(actions.linesFetchError(e))
+  }
+}
+
 export function* watchLineFetch() {
   yield takeLatest(ActionTypes.lineSingleFetchStart, lineFetch)
 }
@@ -80,5 +91,9 @@ export function* watchLineDelete() {
   yield takeLatest(ActionTypes.lineDeleteStart, lineDelete)
 }
 
+export function* watchLineJudge() {
+  yield takeLatest(ActionTypes.lineJudgeStart, lineJudge)
+}
+
 // Export watchers as default export in an array
-export default [watchLineFetch, watchLinesFetch, watchLinesCreate, watchLineUpdate, watchLineDelete]
+export default [watchLineFetch, watchLinesFetch, watchLinesCreate, watchLineUpdate, watchLineDelete, watchLineJudge]
