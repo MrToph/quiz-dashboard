@@ -11,6 +11,7 @@ import SwipeRoute from './routes/Swipe'
 import ArtistsRoute from './routes/Artists'
 import ArtistProfile from './routes/ArtistProfile'
 import LineProfile from './routes/LineProfile'
+import ScrapeRoute from './routes/Scrape'
 import Route404 from './routes/404'
 import { createAppStarted } from './store/navigation/actions'
 import './App.css'
@@ -38,6 +39,7 @@ export class App extends Component {
           <PrivateRoute exact path="/lines/:lineId" component={LineProfile} />
           <PrivateRoute exact path="/artists" component={ArtistsRoute} />
           <PrivateRoute exact path="/artists/:artistName" component={ArtistProfile} />
+          <PrivateRoute exact path="/scrape" component={ScrapeRoute} />
           <PrivateRoute component={Route404} />
         </Switch>
       </div>

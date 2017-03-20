@@ -4,7 +4,7 @@ import './LineCard.css'
 export default function LineCard({ text, artist, songTitle, album, language, moreUrl }) {
   return (
     <div className="ui cards">
-      <div className="card">
+      <div className="noselect card">
         <div className="content">
           <img className="right floated mini ui image" src="http://semantic-ui.com/images/avatar/large/elliot.jpg" alt="bla" />
           <div className="header">{`${artist} - ${songTitle}`}</div>
