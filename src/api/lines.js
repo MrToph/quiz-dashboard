@@ -77,3 +77,29 @@ export function judgeLine(apiToken, id, acceptLine) {
   })
   .then(parseAndHandleErrors)
 }
+
+export function scrapePopularLines(apiToken, artistNames, numberOfSongsToParse) {
+  const headers = configurePostOptions(apiToken)
+  const body = {
+    artistNames,
+    numberOfSongsToParse,
+  }
+  return fetch(`${url}/scrape/popular`, {
+    ...headers,
+    body: JSON.stringify(body),
+  })
+  .then(parseAndHandleErrors)
+}
+
+export function scrapeNewLines(apiToken, artistNames, timestampToParseFrom) {
+  const headers = configurePostOptions(apiToken)
+  const body = {
+    artistNames,
+    timestampToParseFrom,
+  }
+  return fetch(`${url}/scrape/date`, {
+    ...headers,
+    body: JSON.stringify(body),
+  })
+  .then(parseAndHandleErrors)
+}

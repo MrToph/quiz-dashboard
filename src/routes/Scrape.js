@@ -3,9 +3,8 @@ import { connect } from 'react-redux'
 import ArtistSelectionRow from '../components/ArtistSelectionRow'
 import { selectArtists } from '../store/selectors'
 import { artistsFetchStart } from '../store/data/actions/artists'
+import { scrapeLinesByPopularityStart, scrapeLinesSinceDateStart } from '../store/data/actions/lines'
 import { dateToInputFormat } from '../utils'
-
-console.log(dateToInputFormat(new Date()))
 
 export class Scrape extends Component {
   static propTypes = {
@@ -13,6 +12,8 @@ export class Scrape extends Component {
       name: PropTypes.string.isRequired,
     })).isRequired,
     fetchArtists: PropTypes.func.isRequired,
+    scrapeLinesByPopularity: PropTypes.func.isRequired,
+    scrapeLinesSinceDate: PropTypes.func.isRequired,
   }
 
   state = {
@@ -53,13 +54,13 @@ export class Scrape extends Component {
   onParsePopularSongsClick = () => {
     const artistsToCheck = this.getArtistToCheck()
     const { numberOfSongsToParse } = this.state
-    console.log(artistsToCheck, numberOfSongsToParse)
+    this.props.scrapeLinesByPopularity(artistsToCheck, numberOfSongsToParse)
   }
 
   onParseSongsFromDate = () => {
     const artistsToCheck = this.getArtistToCheck()
     const { dateToParseFrom } = this.state
-    console.log(artistsToCheck, dateToParseFrom)
+    this.props.scrapeLinesSinceDate(artistsToCheck, dateToParseFrom)
   }
 
   getArtistToCheck = () => {
@@ -107,4 +108,6 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   fetchArtists: artistsFetchStart,
+  scrapeLinesByPopularity: scrapeLinesByPopularityStart,
+  scrapeLinesSinceDate: scrapeLinesSinceDateStart,
 })(Scrape)

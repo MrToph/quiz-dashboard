@@ -15,6 +15,10 @@ var ActionTypes = { // eslint-disable-line
   lineJudgeStart: 'LINE_JUDGE_START',
   lineJudgeSuccess: 'LINE_JUDGE_SUCCESS',
   lineJudgeSkip: 'LINE_JUDGE_SKIP',
+  scrapePopularStart: 'SCRAPE_LINES_POPULAR_START',
+  scrapePopularSuccess: 'SCRAPE_LINES_POPULAR_SUCCESS',
+  scrapeLinesSinceDateStart: 'SCRAPE_LINES_DATE_START',
+  scrapeLinesSinceDateSuccess: 'SCRAPE_LINES_DATE_SUCCESS',
 }
 
 export default ActionTypes
@@ -132,5 +136,37 @@ export const lineJudgeSkip = id => ({
   type: ActionTypes.lineJudgeSkip,
   payload: {
     id,
+  },
+})
+
+export const scrapeLinesByPopularityStart = (artistNames, numberOfSongsToParse) => ({
+  type: ActionTypes.scrapePopularStart,
+  payload: {
+    artistNames,
+    numberOfSongsToParse,
+  },
+})
+
+export const scrapeLinesByPopularitySuccess = (artistNames, numberOfSongsToParse) => ({
+  type: ActionTypes.scrapePopularSuccess,
+  payload: {
+    artistNames,
+    numberOfSongsToParse,
+  },
+})
+
+export const scrapeLinesSinceDateStart = (artistNames, dateToParseFrom) => ({
+  type: ActionTypes.scrapeLinesSinceDateStart,
+  payload: {
+    artistNames,
+    timestampToParseFrom: new Date(dateToParseFrom).getTime(),
+  },
+})
+
+export const scrapeLinesSinceDateSuccess = (artistNames, dateToParseFrom) => ({
+  type: ActionTypes.scrapeLinesSinceDateSuccess,
+  payload: {
+    artistNames,
+    timestampToParseFrom: new Date(dateToParseFrom).getTime(),
   },
 })

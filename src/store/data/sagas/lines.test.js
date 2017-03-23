@@ -1,7 +1,7 @@
 import { call, put, select } from 'redux-saga/effects'
 import * as actions from '../actions/lines'
-import { lineFetch, linesFetch, linesCreate, lineUpdate, lineDelete, lineJudge } from './lines'
-import { getLine, getLines, createLines, updateLine, deleteLine, judgeLine } from '../../../api'
+import { lineFetch, linesFetch, linesCreate, lineUpdate, lineDelete, lineJudge, scrapeLinesByPopularity, scrapeLinesSinceDate } from './lines'
+import { getLine, getLines, createLines, updateLine, deleteLine, judgeLine, scrapePopularLines, scrapeNewLines } from '../../../api'
 import { selectAuthToken, selectLatestLineId } from '../../../store/selectors'
 
 const authToken = 'JWT 123456'
@@ -18,7 +18,6 @@ const exampleLine = {
   ...exampleLineWithoutId,
   id: 'id123456',
 }
-
 
 const tests = [
   {
@@ -73,6 +72,26 @@ const tests = [
     apiCallArguments: [exampleLine.id, true],
     successActionCreator: actions.lineJudgeSuccess,
     successActionCreatorArguments: [exampleLine.id, true],
+  },
+  {
+    testName: 'scrapeLinesByPopularity',
+    saga: scrapeLinesByPopularity,
+    initialActionCreator: actions.scrapeLinesByPopularityStart,
+    initialActionCreatorArguments: [['Artist1', 'Artist2'], 29],
+    apiCall: scrapePopularLines,
+    apiCallArguments: [['Artist1', 'Artist2'], 29],
+    successActionCreator: actions.scrapeLinesByPopularitySuccess,
+    successActionCreatorArguments: [['Artist1', 'Artist2'], 29],
+  },
+  {
+    testName: 'scrapeLinesSinceDate',
+    saga: scrapeLinesSinceDate,
+    initialActionCreator: actions.scrapeLinesSinceDateStart,
+    initialActionCreatorArguments: [['Artist1', 'Artist2'], '2017-04-29'],
+    apiCall: scrapeNewLines,
+    apiCallArguments: [['Artist1', 'Artist2'], 1493424000 * 1000],
+    successActionCreator: actions.scrapeLinesSinceDateSuccess,
+    successActionCreatorArguments: [['Artist1', 'Artist2'], '2017-04-29'],
   },
 ]
 

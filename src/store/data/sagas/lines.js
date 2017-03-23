@@ -2,7 +2,7 @@ import { call, put, takeLatest, select } from 'redux-saga/effects'
 import ActionTypes, * as actions from '../actions/lines'
 import { selectAuthToken, selectLatestLineId } from '../../selectors'
 
-import { getLine, getLines, createLines, updateLine, deleteLine, judgeLine } from '../../../api'
+import { getLine, getLines, createLines, updateLine, deleteLine, judgeLine, scrapePopularLines, scrapeNewLines } from '../../../api'
 
 export function* lineFetch(action) {
   try {
@@ -71,6 +71,28 @@ export function* lineJudge(action) {
   }
 }
 
+export function* scrapeLinesByPopularity(action) {
+  try {
+    const { artistNames, numberOfSongsToParse } = action.payload
+    const jwtToken = yield select(selectAuthToken)
+    yield call(scrapePopularLines, jwtToken, artistNames, numberOfSongsToParse)
+    yield put(actions.scrapeLinesByPopularitySuccess(artistNames, numberOfSongsToParse))
+  } catch (e) {
+    yield put(actions.linesFetchError(e))
+  }
+}
+
+export function* scrapeLinesSinceDate(action) {
+  try {
+    const { artistNames, timestampToParseFrom } = action.payload
+    const jwtToken = yield select(selectAuthToken)
+    yield call(scrapeNewLines, jwtToken, artistNames, timestampToParseFrom)
+    yield put(actions.scrapeLinesSinceDateSuccess(artistNames, timestampToParseFrom))
+  } catch (e) {
+    yield put(actions.linesFetchError(e))
+  }
+}
+
 export function* watchLineFetch() {
   yield takeLatest(ActionTypes.lineSingleFetchStart, lineFetch)
 }
@@ -95,5 +117,13 @@ export function* watchLineJudge() {
   yield takeLatest(ActionTypes.lineJudgeStart, lineJudge)
 }
 
+export function* watchScrapeByPopularity() {
+  yield takeLatest(ActionTypes.scrapePopularStart, scrapeLinesByPopularity)
+}
+
+export function* watchScrapeSinceDate() {
+  yield takeLatest(ActionTypes.scrapeLinesSinceDateStart, scrapeLinesSinceDate)
+}
+
 // Export watchers as default export in an array
-export default [watchLineFetch, watchLinesFetch, watchLinesCreate, watchLineUpdate, watchLineDelete, watchLineJudge]
+export default [watchLineFetch, watchLinesFetch, watchLinesCreate, watchLineUpdate, watchLineDelete, watchLineJudge, watchScrapeByPopularity, watchScrapeSinceDate]
