@@ -26,11 +26,7 @@ export function validateSignupInput(data) {
 }
 
 export function validateArtistInput(data) {
-  const errors = checkRequiredFields(data, ['name', 'url'])
-
-  if (!Validator.isURL(data.url)) {
-    errors.url = 'This field is not a valid URL'
-  }
+  const errors = checkRequiredFields(data, ['name'])
 
   return { errors, isValid: Object.keys(errors).length === 0 }
 }

@@ -14,7 +14,7 @@ export const artistsFormInputs = [
   },
   {
     name: 'url',
-    label: 'URL',
+    label: 'URL - can be left blank and be filled in automatically',
   },
 ]
 
