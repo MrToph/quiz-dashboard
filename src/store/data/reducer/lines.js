@@ -1,3 +1,4 @@
+/* eslint-disable no-fallthrough */
 import { extractServerErrors } from '../../../api/Error'
 import ActionTypes from '../actions/lines'
 
@@ -6,9 +7,7 @@ export const defaultLinesState = {
   formOpen: false,
   hasMoreLines: false,
   serverErrors: [],
-  lines: [
-    'id31415',
-  ],
+  lines: ['id31415'],
   linesById: {
     id31415: {
       id: 'id31415',
@@ -16,9 +15,10 @@ export const defaultLinesState = {
       artist: 'Artist 1',
       songTitle: 'Song 1',
       album: 'Album 1',
-      language: 'de',   // possible values: 'en' or 'de'
+      language: 'de', // possible values: 'en' or 'de'
       moreUrl: 'https://genius.com',
       active: false,
+      thumbnail: 'http://www.opensourcetesting.org/wp-content/uploads/2016/03/OSTlogo-2.png',
     },
   },
 }
@@ -30,8 +30,11 @@ function sortLines(lines) {
 function linesReducer(state = defaultLinesState, action) {
   switch (action.type) {
     case ActionTypes.linesFetchStart:
+
     case ActionTypes.lineSingleFetchStart:
+
     case ActionTypes.lineUpdateStart:
+
     case ActionTypes.lineDeleteStart: {
       return {
         ...state,
@@ -39,6 +42,7 @@ function linesReducer(state = defaultLinesState, action) {
         serverErrors: [],
       }
     }
+
     case ActionTypes.lineJudgeStart: {
       return {
         ...state,
@@ -46,14 +50,16 @@ function linesReducer(state = defaultLinesState, action) {
         serverErrors: [],
       }
     }
+
     case ActionTypes.linesCreateStart: {
       return {
         ...state,
-        formOpen: true,  /* set to true, so false can get injected on success */
+        formOpen: true /* set to true, so false can get injected on success */,
         isLoading: true,
         serverErrors: [],
       }
     }
+
     case ActionTypes.linesFetchLoadSuccess: {
       const { lines, isInitial } = action.payload
       let newLines
@@ -61,7 +67,7 @@ function linesReducer(state = defaultLinesState, action) {
       else newLines = state.lines.concat(lines.map(line => line.id))
       sortLines(newLines)
 
-      const newLinesById = Object.assign({}, isInitial ? { } : state.linesById)
+      const newLinesById = Object.assign({}, isInitial ? {} : state.linesById)
       lines.forEach((line) => {
         newLinesById[line.id] = line
       })
@@ -76,9 +82,12 @@ function linesReducer(state = defaultLinesState, action) {
         hasMoreLines,
       }
     }
+
     case ActionTypes.lineSingleFetchLoadSuccess: {
       const { line } = action.payload
-      const newLines = state.lines.find(id => id === line.id) ? state.lines : state.lines.concat([line.id])
+      const newLines = state.lines.find(id => id === line.id)
+        ? state.lines
+        : state.lines.concat([line.id])
       sortLines(newLines)
       const newLinesById = {
         ...state.linesById,
@@ -91,6 +100,7 @@ function linesReducer(state = defaultLinesState, action) {
         linesById: newLinesById,
       }
     }
+
     case ActionTypes.linesFetchError: {
       const errors = extractServerErrors(action)
       return {
@@ -100,17 +110,19 @@ function linesReducer(state = defaultLinesState, action) {
         isLoading: false,
       }
     }
+
     case ActionTypes.linesCreateSuccess: {
       // if server responded with success, do not add it to our list, because it would break fetching more lines because id is the highest
       // instead fetch it from server
       const hasMoreLines = true
       return {
         ...state,
-        formOpen: false,  /* close form on success */
+        formOpen: false /* close form on success */,
         isLoading: false,
         hasMoreLines,
       }
     }
+
     case ActionTypes.lineUpdateSuccess: {
       // id never changes
       const line = action.payload
@@ -125,6 +137,7 @@ function linesReducer(state = defaultLinesState, action) {
         linesById: newLinesById,
       }
     }
+
     case ActionTypes.lineDeleteSuccess: {
       const { id } = action.payload
       const newLines = state.lines.filter(lineId => lineId !== id)
@@ -139,7 +152,9 @@ function linesReducer(state = defaultLinesState, action) {
         linesById: newLinesById,
       }
     }
+
     case ActionTypes.lineJudgeSuccess:
+
     case ActionTypes.lineJudgeSkip: {
       const { id } = action.payload
       const newLines = state.lines.filter(lineId => lineId !== id)
@@ -154,6 +169,7 @@ function linesReducer(state = defaultLinesState, action) {
         linesById: newLinesById,
       }
     }
+
     default: {
       return state
     }

@@ -1,6 +1,12 @@
 import qparams from 'query-params'
-import { parseAndHandleErrors, configureGetOptions, configurePostOptions,
-  configurePatchOptions, configureDeleteOptions, url } from './helpers'
+import {
+  parseAndHandleErrors,
+  configureGetOptions,
+  configurePostOptions,
+  configurePatchOptions,
+  configureDeleteOptions,
+  url,
+} from './helpers'
 
 function extractLineFields(lineResponse) {
   return {
@@ -12,6 +18,7 @@ function extractLineFields(lineResponse) {
     songTitle: lineResponse.songTitle,
     text: lineResponse.text,
     moreUrl: lineResponse.moreUrl,
+    thumbnail: lineResponse.thumbnail,
   }
 }
 
@@ -20,8 +27,8 @@ export function getLine(apiToken, id) {
   return fetch(`${url}/lines/${id}`, {
     ...headers,
   })
-  .then(parseAndHandleErrors)
-  .then(response => extractLineFields(response.line))
+    .then(parseAndHandleErrors)
+    .then(response => extractLineFields(response.line))
 }
 
 export function getLines(apiToken, lineStatus, fromId) {
@@ -33,8 +40,8 @@ export function getLines(apiToken, lineStatus, fromId) {
   return fetch(`${url}/lines?${qparams.encode(params)}`, {
     ...headers,
   })
-  .then(parseAndHandleErrors)
-  .then(response => response.lines.map(line => extractLineFields(line)))
+    .then(parseAndHandleErrors)
+    .then(response => response.lines.map(line => extractLineFields(line)))
 }
 
 export function createLines(apiToken, lineWithoutId) {
@@ -44,8 +51,8 @@ export function createLines(apiToken, lineWithoutId) {
     ...headers,
     body: JSON.stringify(body),
   })
-  .then(parseAndHandleErrors)
-  .then(line => extractLineFields(line))
+    .then(parseAndHandleErrors)
+    .then(line => extractLineFields(line))
 }
 
 export function updateLine(apiToken, line) {
@@ -54,16 +61,14 @@ export function updateLine(apiToken, line) {
   return fetch(`${url}/lines/${line.id}`, {
     ...headers,
     body: JSON.stringify(body),
-  })
-  .then(parseAndHandleErrors)
+  }).then(parseAndHandleErrors)
 }
 
 export function deleteLine(apiToken, id) {
   const headers = configureDeleteOptions(apiToken)
   return fetch(`${url}/lines/${id}`, {
     ...headers,
-  })
-  .then(parseAndHandleErrors)
+  }).then(parseAndHandleErrors)
 }
 
 export function judgeLine(apiToken, id, acceptLine) {
@@ -74,11 +79,14 @@ export function judgeLine(apiToken, id, acceptLine) {
   return fetch(`${url}/judgeLine/${id}`, {
     ...headers,
     body: JSON.stringify(body),
-  })
-  .then(parseAndHandleErrors)
+  }).then(parseAndHandleErrors)
 }
 
-export function scrapePopularLines(apiToken, artistNames, numberOfSongsToParse) {
+export function scrapePopularLines(
+  apiToken,
+  artistNames,
+  numberOfSongsToParse,
+) {
   const headers = configurePostOptions(apiToken)
   const body = {
     artistNames,
@@ -87,8 +95,7 @@ export function scrapePopularLines(apiToken, artistNames, numberOfSongsToParse) 
   return fetch(`${url}/scrape/popular`, {
     ...headers,
     body: JSON.stringify(body),
-  })
-  .then(parseAndHandleErrors)
+  }).then(parseAndHandleErrors)
 }
 
 export function scrapeNewLines(apiToken, artistNames, timestampToParseFrom) {
@@ -100,6 +107,5 @@ export function scrapeNewLines(apiToken, artistNames, timestampToParseFrom) {
   return fetch(`${url}/scrape/date`, {
     ...headers,
     body: JSON.stringify(body),
-  })
-  .then(parseAndHandleErrors)
+  }).then(parseAndHandleErrors)
 }
