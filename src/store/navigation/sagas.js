@@ -2,7 +2,21 @@ import { call, put, takeLatest } from 'redux-saga/effects'
 import ActionTypes, * as actions from './actions'
 
 import { authenticate, signup } from '../../api'
+import { authUser } from '../../api/libs/awsLib'
 
+export function* appStart() {
+  try {
+    const isAuthenticated = yield call(authUser)
+    if (!isAuthenticated) { throw new Error('User not authenticated. No session stored.') }
+    yield put(actions.userLoginSuccess(isAuthenticated))
+  } catch (e) {
+    yield put(actions.userLoginError(e))
+  }
+}
+
+export function* watchAppStart() {
+  yield takeLatest(ActionTypes.appStarted, appStart)
+}
 
 // worker Saga: will be fired onActionTypes.userLoginStart actions
 export function* userLogin(action) {
@@ -38,3 +52,5 @@ export function* userSignup(action) {
 export function* watchUserSignup() {
   yield takeLatest(ActionTypes.userSignupStart, userSignup)
 }
+
+export default [watchAppStart, watchUserLogin, watchUserSignup]

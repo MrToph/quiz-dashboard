@@ -1,38 +1,23 @@
 import { combineReducers } from 'redux'
 import { extractServerErrors } from '../../api/Error'
+import { signOutUser } from '../../api/libs/awsLib'
 import ActionTypes from './actions'
 
 export const defaultLoginState = {
   loggedIn: false,
-  jwtToken: false,
   username: '',
   isLoading: false,
   serverErrors: [],
 }
 
-function saveToLocalStorage(data) {
-  localStorage.setItem('login', JSON.stringify(data))
-}
-
-function clearLocalStorage() {
-  localStorage.removeItem('login')
-}
-
-function loadFromLocalStorage() {
-  try {
-    const json = localStorage.getItem('login')
-    return json ? JSON.parse(json) : defaultLoginState
-  } catch (ex) {
-    console.error(ex.message)
-    return defaultLoginState
-  }
-}
-
 function loginReducer(state = defaultLoginState, action) {
   switch (action.type) {
     case ActionTypes.appStarted: {
-      return loadFromLocalStorage()
+      // authentication from session done in the saga
+      // and updated in the AWS.config state
+      return state
     }
+
     case ActionTypes.userLoginStart: {
       const { username } = action.payload
       return {
@@ -43,17 +28,16 @@ function loginReducer(state = defaultLoginState, action) {
         serverErrors: [],
       }
     }
+
     case ActionTypes.userLoginSuccess: {
-      const { apiToken } = action.payload
       const newState = {
         ...state,
-        jwtToken: apiToken,
         isLoading: false,
         loggedIn: true,
       }
-      saveToLocalStorage(newState)
       return newState
     }
+
     case ActionTypes.userLoginError: {
       const errors = extractServerErrors(action)
       return {
@@ -63,10 +47,12 @@ function loginReducer(state = defaultLoginState, action) {
         loggedIn: false,
       }
     }
+
     case ActionTypes.userLogout: {
-      clearLocalStorage()
+      signOutUser()
       return defaultLoginState
     }
+
     default:
       return state
   }
@@ -86,12 +72,14 @@ function signupReducer(state = defaultSignupState, action) {
         serverErrors: [],
       }
     }
+
     case ActionTypes.userSignupSuccess: {
       return {
         ...state,
         isLoading: false,
       }
     }
+
     case ActionTypes.userSignupError: {
       const errors = extractServerErrors(action)
       return {
@@ -100,6 +88,7 @@ function signupReducer(state = defaultSignupState, action) {
         isLoading: false,
       }
     }
+
     default: {
       return state
     }
