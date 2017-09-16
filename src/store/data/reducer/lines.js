@@ -7,6 +7,8 @@ export const defaultLinesState = {
   formOpen: false,
   hasMoreLines: false,
   serverErrors: [],
+  // object consisting of {id, active} (active-index key)
+  lastEvaluatedLineKey: null,
   lines: ['id31415'],
   linesById: {
     id31415: {
@@ -61,7 +63,7 @@ function linesReducer(state = defaultLinesState, action) {
     }
 
     case ActionTypes.linesFetchLoadSuccess: {
-      const { lines, isInitial } = action.payload
+      const { lines, isInitial, lastEvaluatedLineKey } = action.payload
       let newLines
       if (isInitial) newLines = lines.map(line => line.id)
       else newLines = state.lines.concat(lines.map(line => line.id))
@@ -80,6 +82,7 @@ function linesReducer(state = defaultLinesState, action) {
         lines: newLines,
         linesById: newLinesById,
         hasMoreLines,
+        lastEvaluatedLineKey,
       }
     }
 

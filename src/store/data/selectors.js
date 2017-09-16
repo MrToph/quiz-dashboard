@@ -1,13 +1,17 @@
 import { findLast } from 'lodash'
 
 export const selectArtist = (state, name) => {
-  if (state.artists.artistsByName[name]) return Object.assign({}, state.artists.artistsByName[name])
+  if (state.artists.artistsByName[name]) {
+    return Object.assign({}, state.artists.artistsByName[name])
+  }
   return null
 }
 
 export const selectArtists = (state) => {
   const artists = []
-  state.artists.artists.forEach(artist => artists.push(Object.assign({}, state.artists.artistsByName[artist])))
+  state.artists.artists.forEach(artist =>
+    artists.push(Object.assign({}, state.artists.artistsByName[artist])),
+  )
   return artists
 }
 
@@ -20,7 +24,9 @@ export const selectArtistForm = state => ({
 })
 
 export const selectLine = (state, id) => {
-  if (state.lines.linesById[id]) return Object.assign({}, state.lines.linesById[id])
+  if (state.lines.linesById[id]) {
+    return Object.assign({}, state.lines.linesById[id])
+  }
   return null
 }
 
@@ -33,13 +39,10 @@ export const selectLines = (state, lineStatus) => {
   return lines
 }
 
-export const selectLatestLineId = (state, lineStatus) => {
-  // lines are sorted ascending, we want the biggest id, so search from right
-  const lastLineNameWithMatchingStatus = findLast(state.lines.lines, lineId => state.lines.linesById[lineId].active === lineStatus)
-  return lastLineNameWithMatchingStatus
-}
+export const selectLatestLineId = state => state.lines.lastEvaluatedLineKey
 
-export const selectHasMoreLines = state => state.lines.hasMoreLines && !state.lines.isLoading
+export const selectHasMoreLines = state =>
+  state.lines.hasMoreLines && !state.lines.isLoading
 
 export const selectLineForm = state => ({
   errors: { form: state.lines.serverErrors.join('\n') },

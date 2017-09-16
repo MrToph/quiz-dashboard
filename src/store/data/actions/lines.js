@@ -1,6 +1,7 @@
 // import { isProduction } from '../../utils'
 
-var ActionTypes = { // eslint-disable-line
+var ActionTypes = {
+  // eslint-disable-line
   linesFetchStart: 'LINES_FETCH_START',
   lineSingleFetchStart: 'LINES_SINGLE_FETCH_START',
   linesFetchLoadSuccess: 'LINES_FETCH_LOAD_SUCCESS',
@@ -38,11 +39,16 @@ export const lineSingleFetchStart = id => ({
   },
 })
 
-export const linesFetchLoadSuccess = (lines, isInitial) => ({
+export const linesFetchLoadSuccess = (
+  lines,
+  isInitial,
+  lastEvaluatedLineKey,
+) => ({
   type: ActionTypes.linesFetchLoadSuccess,
   payload: {
     lines,
     isInitial,
+    lastEvaluatedLineKey,
   },
 })
 
@@ -58,7 +64,15 @@ export const linesFetchError = error => ({
   payload: error,
 })
 
-export const linesCreateStart = (text, artist, songTitle, album, language, url, active) => ({
+export const linesCreateStart = (
+  text,
+  artist,
+  songTitle,
+  album,
+  language,
+  url,
+  active,
+) => ({
   type: ActionTypes.linesCreateStart,
   payload: {
     text,
@@ -79,7 +93,16 @@ export const linesCreateSuccess = payload => ({
   },
 })
 
-export const lineUpdateStart = (id, text, artist, songTitle, album, language, url, active) => ({
+export const lineUpdateStart = (
+  id,
+  text,
+  artist,
+  songTitle,
+  album,
+  language,
+  url,
+  active,
+) => ({
   type: ActionTypes.lineUpdateStart,
   payload: {
     id,
@@ -107,7 +130,6 @@ export const lineDeleteStart = id => ({
     id,
   },
 })
-
 
 export const lineDeleteSuccess = id => ({
   type: ActionTypes.lineDeleteSuccess,
@@ -139,7 +161,10 @@ export const lineJudgeSkip = id => ({
   },
 })
 
-export const scrapeLinesByPopularityStart = (artistNames, numberOfSongsToParse) => ({
+export const scrapeLinesByPopularityStart = (
+  artistNames,
+  numberOfSongsToParse,
+) => ({
   type: ActionTypes.scrapePopularStart,
   payload: {
     artistNames,
@@ -147,7 +172,10 @@ export const scrapeLinesByPopularityStart = (artistNames, numberOfSongsToParse) 
   },
 })
 
-export const scrapeLinesByPopularitySuccess = (artistNames, numberOfSongsToParse) => ({
+export const scrapeLinesByPopularitySuccess = (
+  artistNames,
+  numberOfSongsToParse,
+) => ({
   type: ActionTypes.scrapePopularSuccess,
   payload: {
     artistNames,

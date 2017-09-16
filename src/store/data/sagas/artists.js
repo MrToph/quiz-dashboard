@@ -2,13 +2,18 @@ import { call, put, takeLatest, select } from 'redux-saga/effects'
 import ActionTypes, * as actions from '../actions/artists'
 import { selectAuthToken } from '../../selectors'
 
-import { getArtist, getArtists, createArtists, updateArtist, deleteArtist } from '../../../api'
+import {
+  getArtist,
+  getArtists,
+  createArtists,
+  updateArtist,
+  deleteArtist,
+} from '../../../api'
 
 export function* artistFetch(action) {
   try {
     const { name } = action.payload
-    const jwtToken = yield select(selectAuthToken)
-    const artist = yield call(getArtist, jwtToken, name)
+    const artist = yield call(getArtist, name)
     yield put(actions.artistSingleFetchLoadSuccess(artist))
   } catch (e) {
     yield put(actions.artistsFetchError(e))
@@ -17,8 +22,7 @@ export function* artistFetch(action) {
 
 export function* artistsFetch() {
   try {
-    const jwtToken = yield select(selectAuthToken)
-    const artists = yield call(getArtists, jwtToken)
+    const artists = yield call(getArtists)
     yield put(actions.artistsFetchLoadSuccess(artists))
   } catch (e) {
     yield put(actions.artistsFetchError(e))
@@ -28,8 +32,7 @@ export function* artistsFetch() {
 export function* artistsCreate(action) {
   try {
     const { name, url } = action.payload
-    const jwtToken = yield select(selectAuthToken)
-    yield call(createArtists, jwtToken, name, url)
+    yield call(createArtists, name, url)
     yield put(actions.artistsCreateSuccess(name, url))
   } catch (e) {
     yield put(actions.artistsFetchError(e))
@@ -38,9 +41,8 @@ export function* artistsCreate(action) {
 
 export function* artistUpdate(action) {
   try {
-    const { oldName, name, url } = action.payload
-    const jwtToken = yield select(selectAuthToken)
-    yield call(updateArtist, jwtToken, oldName, name, url)
+    const { oldName, url } = action.payload
+    yield call(updateArtist, oldName, url)
     yield put(actions.artistUpdateSuccess(oldName, name, url))
   } catch (e) {
     yield put(actions.artistsFetchError(e))
@@ -50,8 +52,7 @@ export function* artistUpdate(action) {
 export function* artistDelete(action) {
   try {
     const { name } = action.payload
-    const jwtToken = yield select(selectAuthToken)
-    yield call(deleteArtist, jwtToken, name)
+    yield call(deleteArtist, name)
     yield put(actions.artistDeleteSuccess(name))
   } catch (e) {
     yield put(actions.artistsFetchError(e))
@@ -79,4 +80,10 @@ export function* watchArtistDelete() {
 }
 
 // Export watchers as default export in an array
-export default [watchArtistFetch, watchArtistsFetch, watchArtistsCreate, watchArtistUpdate, watchArtistDelete]
+export default [
+  watchArtistFetch,
+  watchArtistsFetch,
+  watchArtistsCreate,
+  watchArtistUpdate,
+  watchArtistDelete,
+]

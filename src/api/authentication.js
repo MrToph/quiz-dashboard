@@ -3,7 +3,6 @@ import {
   AuthenticationDetails,
   CognitoUser,
 } from 'amazon-cognito-identity-js'
-// import { parseAndHandleErrors, configurePostOptions, url } from './helpers'
 import config from '../config/aws'
 
 export function authenticate(username, password) {
@@ -22,23 +21,3 @@ export function authenticate(username, password) {
     }),
   )
 }
-
-/*
-export function signup(user, password, email) {
-  const headers = configurePostOptions()
-
-  const body = {
-    name: user,
-
-    password,
-
-    email,
-  }
-
-  return fetch(`${url}/signup`, {
-    ...headers,
-
-    body: JSON.stringify(body),
-  }).then(parseAndHandleErrors)
-}
-*/

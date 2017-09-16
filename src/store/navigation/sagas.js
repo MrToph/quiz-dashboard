@@ -1,13 +1,15 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
 import ActionTypes, * as actions from './actions'
 
-import { authenticate, signup } from '../../api'
+import { authenticate } from '../../api'
 import { authUser } from '../../api/libs/awsLib'
 
 export function* appStart() {
   try {
     const isAuthenticated = yield call(authUser)
-    if (!isAuthenticated) { throw new Error('User not authenticated. No session stored.') }
+    if (!isAuthenticated) {
+      throw new Error('User not authenticated. No session stored.')
+    }
     yield put(actions.userLoginSuccess(isAuthenticated))
   } catch (e) {
     yield put(actions.userLoginError(e))
@@ -38,19 +40,4 @@ export function* watchUserLogin() {
   yield takeLatest(ActionTypes.userLoginStart, userLogin)
 }
 
-// will be fired on ActionTypes.userSignupStart actions
-export function* userSignup(action) {
-  try {
-    const { username, password, email } = action.payload
-    const user = yield call(signup, username, password, email)
-    yield put(actions.userSignupSuccess(user))
-  } catch (e) {
-    yield put(actions.userSignupError(e))
-  }
-}
-
-export function* watchUserSignup() {
-  yield takeLatest(ActionTypes.userSignupStart, userSignup)
-}
-
-export default [watchAppStart, watchUserLogin, watchUserSignup]
+export default [watchAppStart, watchUserLogin]

@@ -2,13 +2,21 @@ import { call, put, takeLatest, select } from 'redux-saga/effects'
 import ActionTypes, * as actions from '../actions/lines'
 import { selectAuthToken, selectLatestLineId } from '../../selectors'
 
-import { getLine, getLines, createLines, updateLine, deleteLine, judgeLine, scrapePopularLines, scrapeNewLines } from '../../../api'
+import {
+  getLine,
+  getLines,
+  createLines,
+  updateLine,
+  deleteLine,
+  judgeLine,
+  scrapePopularLines,
+  scrapeNewLines,
+} from '../../../api'
 
 export function* lineFetch(action) {
   try {
     const { id } = action.payload
-    const jwtToken = yield select(selectAuthToken)
-    const line = yield call(getLine, jwtToken, id)
+    const line = yield call(getLine, id)
     yield put(actions.lineSingleFetchLoadSuccess(line))
   } catch (e) {
     yield put(actions.linesFetchError(e))
@@ -18,10 +26,15 @@ export function* lineFetch(action) {
 export function* linesFetch(action) {
   try {
     const { lineStatus, isInitial } = action.payload
-    const jwtToken = yield select(selectAuthToken)
-    const latestLineId = !isInitial ? yield select(selectLatestLineId, lineStatus) : false
-    const lines = yield call(getLines, jwtToken, lineStatus, latestLineId)
-    yield put(actions.linesFetchLoadSuccess(lines, isInitial))
+    const latestLineId = !isInitial ? yield select(selectLatestLineId) : false
+    const { lines, lastEvaluatedLineKey } = yield call(
+      getLines,
+      lineStatus,
+      latestLineId,
+    )
+    yield put(
+      actions.linesFetchLoadSuccess(lines, isInitial, lastEvaluatedLineKey),
+    )
   } catch (e) {
     yield put(actions.linesFetchError(e))
   }
@@ -30,8 +43,7 @@ export function* linesFetch(action) {
 export function* linesCreate(action) {
   try {
     const line = action.payload
-    const jwtToken = yield select(selectAuthToken)
-    const lineWidthId = yield call(createLines, jwtToken, line)
+    const lineWidthId = yield call(createLines, line)
     yield put(actions.linesCreateSuccess(lineWidthId))
   } catch (e) {
     yield put(actions.linesFetchError(e))
@@ -41,8 +53,7 @@ export function* linesCreate(action) {
 export function* lineUpdate(action) {
   try {
     const line = action.payload
-    const jwtToken = yield select(selectAuthToken)
-    yield call(updateLine, jwtToken, line)
+    yield call(updateLine, line)
     yield put(actions.lineUpdateSuccess(line))
   } catch (e) {
     yield put(actions.linesFetchError(e))
@@ -52,8 +63,7 @@ export function* lineUpdate(action) {
 export function* lineDelete(action) {
   try {
     const { id } = action.payload
-    const jwtToken = yield select(selectAuthToken)
-    yield call(deleteLine, jwtToken, id)
+    yield call(deleteLine, id)
     yield put(actions.lineDeleteSuccess(id))
   } catch (e) {
     yield put(actions.linesFetchError(e))
@@ -63,8 +73,7 @@ export function* lineDelete(action) {
 export function* lineJudge(action) {
   try {
     const { id, acceptLine } = action.payload
-    const jwtToken = yield select(selectAuthToken)
-    yield call(judgeLine, jwtToken, id, acceptLine)
+    yield call(judgeLine, id, acceptLine)
     yield put(actions.lineJudgeSuccess(id, acceptLine))
   } catch (e) {
     yield put(actions.linesFetchError(e))
@@ -74,9 +83,10 @@ export function* lineJudge(action) {
 export function* scrapeLinesByPopularity(action) {
   try {
     const { artistNames, numberOfSongsToParse } = action.payload
-    const jwtToken = yield select(selectAuthToken)
-    yield call(scrapePopularLines, jwtToken, artistNames, numberOfSongsToParse)
-    yield put(actions.scrapeLinesByPopularitySuccess(artistNames, numberOfSongsToParse))
+    yield call(scrapePopularLines, artistNames, numberOfSongsToParse)
+    yield put(
+      actions.scrapeLinesByPopularitySuccess(artistNames, numberOfSongsToParse),
+    )
   } catch (e) {
     yield put(actions.linesFetchError(e))
   }
@@ -85,9 +95,10 @@ export function* scrapeLinesByPopularity(action) {
 export function* scrapeLinesSinceDate(action) {
   try {
     const { artistNames, timestampToParseFrom } = action.payload
-    const jwtToken = yield select(selectAuthToken)
-    yield call(scrapeNewLines, jwtToken, artistNames, timestampToParseFrom)
-    yield put(actions.scrapeLinesSinceDateSuccess(artistNames, timestampToParseFrom))
+    yield call(scrapeNewLines, artistNames, timestampToParseFrom)
+    yield put(
+      actions.scrapeLinesSinceDateSuccess(artistNames, timestampToParseFrom),
+    )
   } catch (e) {
     yield put(actions.linesFetchError(e))
   }
@@ -126,4 +137,13 @@ export function* watchScrapeSinceDate() {
 }
 
 // Export watchers as default export in an array
-export default [watchLineFetch, watchLinesFetch, watchLinesCreate, watchLineUpdate, watchLineDelete, watchLineJudge, watchScrapeByPopularity, watchScrapeSinceDate]
+export default [
+  watchLineFetch,
+  watchLinesFetch,
+  watchLinesCreate,
+  watchLineUpdate,
+  watchLineDelete,
+  watchLineJudge,
+  watchScrapeByPopularity,
+  watchScrapeSinceDate,
+]

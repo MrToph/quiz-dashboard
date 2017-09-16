@@ -1,77 +1,65 @@
-import {
-  parseAndHandleErrors,
-  configureGetOptions,
-  configurePostOptions,
-  configurePatchOptions,
-  configureDeleteOptions,
-  url,
-} from './helpers'
 import { invokeApig } from './libs/awsLib'
 
-export function getArtist(apiToken, name) {
-  const headers = configureGetOptions(apiToken)
-  return fetch(`${url}/artists/${name}`, {
-    ...headers,
-  })
-    .then(parseAndHandleErrors)
-    .then(response => ({
-      name: response.artist.name,
-      url: response.artist.url,
-    }))
-}
-
-export function getArtists(apiToken) {
+export function getArtist(name) {
   try {
     return invokeApig({
-      path: '/notes',
-      method: 'POST',
-      body: {
-        content: 'Test note content from within dashboard!',
-      },
+      path: `/artists/${name}`,
+      method: 'GET',
     })
   } catch (e) {
-    alert(e)
+    return Promise.reject(e)
   }
-  const headers = configureGetOptions(apiToken)
-  return fetch(`${url}/artists`, {
-    ...headers,
-  })
-    .then(parseAndHandleErrors)
-    .then(response =>
-      response.artists.map(artist => ({
-        name: artist.name,
-        url: artist.url,
-      })),
-    )
 }
 
-export function createArtists(apiToken, name, artistUrl) {
-  const headers = configurePostOptions(apiToken)
-  const body = {
-    name,
-    url: artistUrl,
+export function getArtists() {
+  try {
+    return invokeApig({
+      path: '/artists',
+      method: 'GET',
+    })
+  } catch (e) {
+    return Promise.reject(e)
   }
-  return fetch(`${url}/artists`, {
-    ...headers,
-    body: JSON.stringify(body),
-  }).then(parseAndHandleErrors)
 }
 
-export function updateArtist(apiToken, oldName, name, artistUrl) {
-  const headers = configurePatchOptions(apiToken)
-  const body = {
-    name,
-    url: artistUrl,
+export function createArtists(name, artistUrl) {
+  try {
+    const body = {
+      name,
+      url: artistUrl,
+    }
+    return invokeApig({
+      path: '/artists',
+      method: 'POST',
+      body,
+    })
+  } catch (e) {
+    return Promise.reject(e)
   }
-  return fetch(`${url}/artists/${oldName}`, {
-    ...headers,
-    body: JSON.stringify(body),
-  }).then(parseAndHandleErrors)
 }
 
-export function deleteArtist(apiToken, name) {
-  const headers = configureDeleteOptions(apiToken)
-  return fetch(`${url}/artists/${name}`, {
-    ...headers,
-  }).then(parseAndHandleErrors)
+export function updateArtist(oldName, newUrl) {
+  try {
+    const body = {
+      url: newUrl,
+    }
+    return invokeApig({
+      path: `/artists/${oldName}`,
+      method: 'PUT',
+      body,
+    })
+  } catch (e) {
+    return Promise.reject(e)
+  }
+}
+
+export function deleteArtist(name) {
+  try {
+    return invokeApig({
+      path: `/artists/${name}`,
+      method: 'DELETE',
+    })
+  } catch (e) {
+    return Promise.reject(e)
+  }
 }

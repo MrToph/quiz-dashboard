@@ -58,51 +58,12 @@ function loginReducer(state = defaultLoginState, action) {
   }
 }
 
-export const defaultSignupState = {
-  isLoading: false,
-  serverErrors: [],
-}
-
-function signupReducer(state = defaultSignupState, action) {
-  switch (action.type) {
-    case ActionTypes.userSignupStart: {
-      return {
-        ...state,
-        isLoading: true,
-        serverErrors: [],
-      }
-    }
-
-    case ActionTypes.userSignupSuccess: {
-      return {
-        ...state,
-        isLoading: false,
-      }
-    }
-
-    case ActionTypes.userSignupError: {
-      const errors = extractServerErrors(action)
-      return {
-        ...state,
-        serverErrors: errors,
-        isLoading: false,
-      }
-    }
-
-    default: {
-      return state
-    }
-  }
-}
-
 const reducers = combineReducers({
   login: loginReducer,
-  signup: signupReducer,
 })
 
 export const defaultState = {
   login: defaultLoginState,
-  signup: defaultSignupState,
 }
 
 export default reducers
