@@ -11,7 +11,7 @@ export default function LineCard({
   thumbnail,
 }) {
   return (
-    <div className="ui cards">
+    <div className="lineCard ui cards">
       <div className="noselect card">
         <div className="content">
           <img
@@ -23,7 +23,7 @@ export default function LineCard({
           <div className="meta">{`${album || ''} (${language})`}</div>
           <div className="lineCard--text left floated description">{text}</div>
         </div>
-        <div>
+        <div className="lineCard--url">
           <a target="_blank" rel="noopener noreferrer" href={moreUrl}>
             {moreUrl}
           </a>

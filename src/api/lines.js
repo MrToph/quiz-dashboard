@@ -1,13 +1,4 @@
-import qparams from 'query-params'
 import { invokeApig } from './libs/awsLib'
-import {
-  parseAndHandleErrors,
-  configureGetOptions,
-  configurePostOptions,
-  configurePatchOptions,
-  configureDeleteOptions,
-  url,
-} from './helpers'
 
 function extractLineFields(lineResponse) {
   return {
@@ -91,41 +82,49 @@ export function deleteLine(id) {
   }
 }
 
-export function judgeLine(apiToken, id, acceptLine) {
-  const headers = configurePostOptions(apiToken)
-  const body = {
-    acceptLine,
+export function judgeLine(id, acceptLine) {
+  try {
+    const body = {
+      acceptLine,
+    }
+    return invokeApig({
+      path: `/judgeLine/${id}`,
+      method: 'POST',
+      body,
+    })
+  } catch (e) {
+    return Promise.reject(e)
   }
-  return fetch(`${url}/judgeLine/${id}`, {
-    ...headers,
-    body: JSON.stringify(body),
-  }).then(parseAndHandleErrors)
 }
 
-export function scrapePopularLines(
-  apiToken,
-  artistNames,
-  numberOfSongsToParse,
-) {
-  const headers = configurePostOptions(apiToken)
-  const body = {
-    artistNames,
-    numberOfSongsToParse,
+export function scrapePopularLines(artistNames, numberOfSongsToParse) {
+  try {
+    const body = {
+      artistNames,
+      numberOfSongsToParse,
+    }
+    return invokeApig({
+      path: '/scrape/popular',
+      method: 'POST',
+      body,
+    })
+  } catch (e) {
+    return Promise.reject(e)
   }
-  return fetch(`${url}/scrape/popular`, {
-    ...headers,
-    body: JSON.stringify(body),
-  }).then(parseAndHandleErrors)
 }
 
-export function scrapeNewLines(apiToken, artistNames, timestampToParseFrom) {
-  const headers = configurePostOptions(apiToken)
-  const body = {
-    artistNames,
-    timestampToParseFrom,
+export function scrapeNewLines(artistNames, timestampToParseFrom) {
+  try {
+    const body = {
+      artistNames,
+      timestampToParseFrom,
+    }
+    return invokeApig({
+      path: '/scrape/date',
+      method: 'POST',
+      body,
+    })
+  } catch (e) {
+    return Promise.reject(e)
   }
-  return fetch(`${url}/scrape/date`, {
-    ...headers,
-    body: JSON.stringify(body),
-  }).then(parseAndHandleErrors)
 }

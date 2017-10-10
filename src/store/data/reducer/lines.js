@@ -74,8 +74,7 @@ function linesReducer(state = defaultLinesState, action) {
         newLinesById[line.id] = line
       })
 
-      const hasMoreLines = isInitial || newLines.length > state.lines.length
-
+      const hasMoreLines = !!lastEvaluatedLineKey
       return {
         ...state,
         isLoading: false,
@@ -156,9 +155,7 @@ function linesReducer(state = defaultLinesState, action) {
       }
     }
 
-    case ActionTypes.lineJudgeSuccess:
-
-    case ActionTypes.lineJudgeSkip: {
+    case ActionTypes.lineJudgeSuccess: {
       const { id } = action.payload
       const newLines = state.lines.filter(lineId => lineId !== id)
       const newLinesById = {

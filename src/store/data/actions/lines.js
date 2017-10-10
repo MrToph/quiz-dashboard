@@ -15,7 +15,6 @@ var ActionTypes = {
   lineDeleteSuccess: 'LINE_DELETE_SUCCESS',
   lineJudgeStart: 'LINE_JUDGE_START',
   lineJudgeSuccess: 'LINE_JUDGE_SUCCESS',
-  lineJudgeSkip: 'LINE_JUDGE_SKIP',
   scrapePopularStart: 'SCRAPE_LINES_POPULAR_START',
   scrapePopularSuccess: 'SCRAPE_LINES_POPULAR_SUCCESS',
   scrapeLinesSinceDateStart: 'SCRAPE_LINES_DATE_START',
@@ -151,13 +150,6 @@ export const lineJudgeSuccess = (id, acceptLine) => ({
   payload: {
     id,
     acceptLine,
-  },
-})
-
-export const lineJudgeSkip = id => ({
-  type: ActionTypes.lineJudgeSkip,
-  payload: {
-    id,
   },
 })
 
